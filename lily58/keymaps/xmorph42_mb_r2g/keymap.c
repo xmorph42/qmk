@@ -4,18 +4,20 @@
 #include "print.h"
 #endif
 
-#ifdef RGB_MATRIX_ENABLE
-#define _RGB_TOG RGB_TOG
-#define _RGB_MOD RGB_MOD
-//#define COLEMAK_ENABLE
-//#define WORKMAN_ENABLE
-#define BASE_LAYERS 4    // the first n layers are base layers
+#ifdef RGB_MATRIX_ENABLE  // 2023-04-17:PBU:not enough space for all layouts
+   #define _RGB_TOG RGB_TOG
+   #define _RGB_MOD RGB_MOD
+   //#define COLEMAK_ENABLE
+   //#define WORKMAN_ENABLE
+   #define MTGAP_ENABLE
+   #define BASE_LAYERS 4    // the first n layers are base layers
 #else
-#define _RGB_TOG XXXXXXX
-#define _RGB_MOD XXXXXXX
-#define COLEMAK_ENABLE
-#define WORKMAN_ENABLE
-#define BASE_LAYERS 6   // the first n layers are base layers
+   #define _RGB_TOG XXXXXXX
+   #define _RGB_MOD XXXXXXX
+   #define COLEMAK_ENABLE
+   #define WORKMAN_ENABLE
+   #define MTGAP_ENABLE
+   #define BASE_LAYERS 7   // the first n layers are base layers
 #endif
 
 enum xmorph_layers {
@@ -29,8 +31,11 @@ enum xmorph_layers {
 #ifdef WORKMAN_ENABLE
     _WORKMAN,
 #endif
+#ifdef MIRYOKU_ENABLE
     _MIRYOKU,
-    _LOWER,
+#endif
+    _MTGAP,
+   _LOWER,
     _RAISE,
     _ADJUST,
 };
@@ -44,6 +49,7 @@ enum custom_keycodes {
     KC_WORKMAN,
 #endif
     KC_MIRYOKU,
+    KC_MTGAP,
     KC_PRVWD,
     KC_NXTWD,
     KC_LSTRT,
@@ -178,12 +184,12 @@ enum Q_GACS{
 // Left-hand colemak home row mods
 #define C_GUI_A LGUI_T(KC_A)
 #define C_ALT_R LALT_T(KC_R)
-#define C_SFT_S LSFT_T(KC_S)
-#define C_CTL_T LCTL_T(KC_T)
+#define C_CTL_S LCTL_T(KC_S)
+#define C_SFT_T LSFT_T(KC_T)
 
 // Right-hand colemak home row mods
-#define C_CTL_N RCTL_T(KC_N)
-#define C_SFT_E RSFT_T(KC_E)
+#define C_SFT_N RSFT_T(KC_N)
+#define C_CTL_E RCTL_T(KC_E)
 #define C_ALT_I LALT_T(KC_I)
 #define C_GUI_O RGUI_T(KC_O)
 
@@ -199,6 +205,16 @@ enum Q_GACS{
 #define M_ALT_I RALT_T(KC_I)
 #define M_GUI_O RGUI_T(KC_O)
 
+// Left-hand MTGAP home row mods
+#define M_GUI_I LGUI_T(KC_I)
+#define M_ALT_N LALT_T(KC_N)
+#define M_SFT_A LSFT_T(KC_A)
+// Right-hand MTGAP home row mods
+#define M_SFT_H RSFT_T(KC_H)
+#define M_CTL_T RCTL_T(KC_T)
+#define M_ALT_S RALT_T(KC_S)
+#define M_GUI_R RGUI_T(KC_R)
+
 // ---------------------------------------------------------------------------------------------
 
 
@@ -211,7 +227,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  | Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Esc  |   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |      |   GUI|   ALT|   SFT|   CTL|      |       |    |       |      |   CTL|   SFT|   ALT|   GUI|      |   
+ * |      |   GUI|   ALT|   CTL|   SFT|      |       |    |       |      |   SFT|   CTL|   ALT|   GUI|      |   
  * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
@@ -270,7 +286,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_COLEMAK] = LAYOUT(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6,       KC_7   , KC_8   , KC_9   , KC_0   , KC_GRV ,
   KC_TAB,  KC_Q   , KC_W   , KC_F   , KC_P   , KC_G      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
-  KC_ESC , C_GUI_A, C_ALT_R, C_SFT_S, C_CTL_T, KC_D      ,                     KC_H,       C_CTL_N, C_SFT_E, C_ALT_I, C_GUI_O, KC_QUOT,
+  KC_ESC , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_D      ,                     KC_H,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, KC_QUOT,
   KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B      , KC_LGUI,   KC_RGUI, KC_K,       KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
                              KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT,    KC_SPC,  MO(_RAISE), KC_RCTL, KC_RALT
 ),
@@ -295,7 +311,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_COLEMAK_DH] = LAYOUT(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6,       KC_7   , KC_8   , KC_9   , KC_0   , KC_GRV ,
   KC_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
-  KC_ESC , C_GUI_A, C_ALT_R, C_SFT_S, C_CTL_T, KC_G      ,                     KC_M,       C_CTL_N, C_SFT_E, C_ALT_I, C_GUI_O, KC_QUOT,
+  KC_ESC , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                     KC_M,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, KC_QUOT,
   KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , KC_LGUI,   KC_RGUI, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
                              KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT,    KC_SPC,  MO(_RAISE), KC_RCTL, KC_RALT
 ),
@@ -344,6 +360,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                   |      |      |      |/       /         \      \ |      |      |      |
  *                   `---------------------------'           '------''---------------------'
  */
+#ifdef MIRYOKU_ENABLE
 [_MIRYOKU] = LAYOUT(
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX   ,                     XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   XXXXXXX, KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, XXXXXXX,
@@ -351,7 +368,34 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   XXXXXXX, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , KC_LGUI,   KC_RGUI, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, XXXXXXX,
                              KC_LALT, KC_LCTL, MO(_LOWER), KC_SPC,    KC_ENT,  MO(_RAISE), KC_RCTL, KC_RALT
 ),
+#endif
 
+/*
+ * MTGandP
+ *
+ * ,-----------------------------------------.                    ,-----------------------------------------.
+ * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |   J  |   P  |   O  |   U  |   X  |                    |   K  |   D  |   L  |   C  |   Q  |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * | ESC  |   I  |   N  |   E  |   A  |   ,  |-------.    ,-------|   M  |   H  |   T  |   S  |   R  |      |
+ * |      |   GUI|   ALT|   CTL|   SFT|      |       |    |       |      |   SFT|   CTL|   ALT|   GUI|      |   
+ * |------+------+------+------+------+------| LGUI  |    | RGUI  |------+------+------+------+------+------|
+ * |      |   Y  |   B  |   Z  |   .  |   ;  |-------|    |-------|   B  |   F  |   G  |   V  |   X  |      |
+ * `-----------------------------------------/       /     \      \-----------------------------------------'
+ *                   | LAlt | LCTR |LOWER | /Space  /       \Enter \  |RAISE | RCTR | RAlt |
+ *                   |      |      |      |/       /         \      \ |      |      |      |
+ *                   `---------------------------'           '------''---------------------'
+ */
+#ifdef MTGAP_ENABLE
+[_MTGAP] = LAYOUT(
+  KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6      , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
+  KC_TAB,  KC_J   , KC_P   , KC_O   , KC_U   , KC_X      ,                     KC_K      , KC_D   , KC_L   , KC_C   , KC_O   , KC_BSPC,
+  KC_ESC,  M_GUI_I, M_ALT_N, M_CTL_E, M_SFT_A, KC_COMM   ,                     KC_M      , M_SFT_H, M_CTL_T, M_ALT_S, M_GUI_R, KC_QUOT,
+  KC_LSFT, KC_Y   , KC_B   , KC_Z   , KC_DOT , KC_SCLN   , KC_LGUI,   KC_RGUI, KC_B      , KC_F   , KC_G   , KC_V   , KC_X   , KC_RSFT,
+                             KC_LALT, KC_LCTL, MO(_LOWER), KC_SPC,    KC_ENT,  MO(_RAISE), KC_RCTL, KC_RALT
+),
+#endif
 /* lower
  *
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -492,9 +536,16 @@ static void print_status_narrow(void) {
             oled_write_ln_P(PSTR("Wrkmn"), false);
             break;
 #endif
+#ifdef MIRYOKU_ENABLE
         case _MIRYOKU:
             oled_write_ln_P(PSTR("Mryok"), false);
             break;
+#endif
+#ifdef MTGAP_ENABLE
+        case _MTGAP:
+            oled_write_ln_P(PSTR("MTGAP"), false);
+            break;
+#endif
         default:
             oled_write_P(PSTR("Undef"), false);
     }
@@ -511,9 +562,16 @@ static void print_status_narrow(void) {
 #ifdef WORKMAN_ENABLE
         case _WORKMAN:
 #endif
+#ifdef MIRYOKU_ENABLE
         case _MIRYOKU:
             oled_write_P(PSTR("Base\n"), false);
             break;
+#endif
+#ifdef MTGAP_ENABLE
+        case _MTGAP:
+            oled_write_P(PSTR("Base\n"), false);
+            break;
+#endif
         case _RAISE:
             oled_write_P(PSTR("Raise"), false);
             break;
@@ -624,11 +682,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
 #endif
+#ifdef MIRYOKU_ENABLE
         case KC_MIRYOKU:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_MIRYOKU);
             }
             return false;
+#endif
+#ifdef MTGAP_ENABLE
+        case KC_MTGAP:
+            if (record->event.pressed) {
+                set_single_persistent_default_layer(_MTGAP);
+            }
+            return false;
+#endif
         case KC_PRVWD:
             if (record->event.pressed) {
                 register_mods(mod_config(MOD_LCTL));
