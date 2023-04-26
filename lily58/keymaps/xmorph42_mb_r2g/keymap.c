@@ -4,24 +4,25 @@
 #include "print.h"
 #endif
 
-#ifdef RGB_MATRIX_ENABLE  // 2023-04-17:PBU:not enough space for all layouts
+#ifdef RGB_MATRIX_ENABLE
    #define _RGB_TOG RGB_TOG
    #define _RGB_MOD RGB_MOD
-   //#define COLEMAK_ENABLE
-   //#define WORKMAN_ENABLE
-   #define MTGAP_ENABLE
-   #define BASE_LAYERS 4    // the first n layers are base layers
 #else
    #define _RGB_TOG XXXXXXX
    #define _RGB_MOD XXXXXXX
-   #define COLEMAK_ENABLE
-   #define WORKMAN_ENABLE
-   #define MTGAP_ENABLE
-   #define BASE_LAYERS 7   // the first n layers are base layers
+#endif
+
+//#define COLEMAK_ENABLE
+//#define WORKMAN_ENABLE
+//#define MIRYOKU_ENABLE
+#define MTGAP_ENABLE
+#define BASE_LAYERS 4    // the first n layers are base layers
+
+#ifdef RP2040
+#else  // maybe not enough space to use all features
 #endif
 
 enum xmorph_layers {
-    /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
     _QWERTY,
     _DVORAK,
 #ifdef COLEMAK_ENABLE
@@ -35,7 +36,7 @@ enum xmorph_layers {
     _MIRYOKU,
 #endif
     _MTGAP,
-   _LOWER,
+    _LOWER,
     _RAISE,
     _ADJUST,
 };
@@ -142,44 +143,19 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 
 // ---------------------------------------------------------------------------------------------
 
-#if 0
-enum Q_GASC {
-   GUI_A = LGUI_T(KC_A),
-   ALT_S = LALT_T(KC_S),
-   SFT_D = LSFT_T(KC_D),
-   CTL_F = LCTL_T(KC_F),
-   CTL_J = RCTL_T(KC_J),
-   SFT_K = RSFT_T(KC_K),
-   ALT_L = LALT_T(KC_L),
-   GUI_SCLN = RGUI_T(KC_SCLN)
-};
-#else
+// Qwerty Home-Row-Mods GACS (GUI,ALT,CTL,SFT)
 enum Q_GACS{
+   // left hand
    GUI_A = LGUI_T(KC_A),
    ALT_S = LALT_T(KC_S),
    CTL_D = LCTL_T(KC_D),
    SFT_F = LSFT_T(KC_F),
+   // right hand
    SFT_J = RSFT_T(KC_J),
    CTL_K = RCTL_T(KC_K),
    ALT_L = LALT_T(KC_L),
    GUI_SCLN = RGUI_T(KC_SCLN)
 };
-#endif
-
-#if 0
-// Left-hand home row mods
-#define GUI_A LGUI_T(KC_A)
-#define ALT_S LALT_T(KC_S)
-#define SFT_D LSFT_T(KC_D)
-#define CTL_F LCTL_T(KC_F)
-
-// Right-hand home row mods
-#define CTL_J RCTL_T(KC_J)
-#define SFT_K RSFT_T(KC_K)
-#define ALT_L LALT_T(KC_L)
-#define GUI_SCLN RGUI_T(KC_SCLN)
-#endif
-
 
 // Left-hand colemak home row mods
 #define C_GUI_A LGUI_T(KC_A)
