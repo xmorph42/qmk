@@ -12,3 +12,4 @@ for more options.
 #define NO_ACTION_FUNCTION // 0
 #define DISABLE_LEADER     // 0     PBU; need to check This . has some similarities to vim
 
+#define SOFLE
