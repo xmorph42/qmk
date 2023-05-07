@@ -21,6 +21,8 @@ MOUSEKEY_ENABLE = yes
 KEY_OVERRIDE_ENABLE = yes 
 
 # allow to assign different codes if a key is only tabbed once or twice
-# Need ca 680 byrte of firmware (without the needed mapping table)
+# Need ca 680 byte of firmware (without the needed mapping table)
 TAP_DANCE_ENABLE = yes 
 
+BACKLIGHT_ENABLE = no      # Enable keyboard backlight functionality
+RGBLIGHT_ENABLE =  no      # Enable keyboard RGB underglow
