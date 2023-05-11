@@ -15,8 +15,9 @@
 //#define COLEMAK_ENABLE
 //#define WORKMAN_ENABLE
 //#define MIRYOKU_ENABLE
-#define MTGAP_ENABLE
-#define BASE_LAYERS 4    // the first n layers are base layers
+//#define MTGAP_ENABLE
+
+#define BASE_LAYERS 3    // the first n layers are base layers
 
 #ifdef RP2040
 #else  // maybe not enough space to use all features
@@ -35,10 +36,13 @@ enum xmorph_layers {
 #ifdef MIRYOKU_ENABLE
     _MIRYOKU,
 #endif
+#ifdef MTGAP_ENABLE
     _MTGAP,
+#endif
     _LOWER,
     _RAISE,
     _ADJUST,
+    _LOC,     // locale layer (umlaut)
 };
 
 enum custom_keycodes {
@@ -168,6 +172,7 @@ enum Q_GACS{
 #define C_CTL_E RCTL_T(KC_E)
 #define C_ALT_I LALT_T(KC_I)
 #define C_GUI_O RGUI_T(KC_O)
+#define C_ALTGR_QUOT 
 
 // Left-hand original miryoku home row mods
 #define M_GUI_A LGUI_T(KC_A)
@@ -191,6 +196,12 @@ enum Q_GACS{
 #define M_ALT_S RALT_T(KC_S)
 #define M_GUI_R RGUI_T(KC_R)
 
+// ---------------------------------------------------------------------------------------------
+#define UML_AE RALT(KC_Q)
+#define UML_OE RALT(KC_P)
+#define UML_UE RALT(KC_Y)
+#define GER_SZ RALT(KC_S)
+#define EU_EUR RALT(KC_5)
 // ---------------------------------------------------------------------------------------------
 
 
@@ -287,7 +298,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_COLEMAK_DH] = LAYOUT(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6,       KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
   KC_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
-  KC_ESC , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                     KC_M,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, KC_QUOT,
+LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                     KC_M,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, LT(_LOC, KC_QUOT),
   KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , KC_LGUI,   KC_RGUI, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
                              KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT,    KC_SPC,  MO(_RAISE), KC_RCTL, KC_RALT
 ),
@@ -437,6 +448,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   QK_BOOT,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX, XXXXXXX,
   XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
                                     _______,       _______,    _______, _______,   _______, _______, _______, _______
+),
+
+/* LOC
+ * ,-----------------------------------------.                    ,-----------------------------------------.
+ * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      | ä Ä  |  ß   |      |      |      |-------'    '-------|      |      |      |      |      |      |
+ * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------|    |-------|      |      |      |      |      |      |
+ * `-----------------------------------------/       /     \      \-----------------------------------------'
+ *                   | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt |
+ *                   |      |      |      |/       /         \      \ |      |      |      |
+ *                   `---------------------------'           '------''---------------------'
+ */
+[_LOC] = LAYOUT(
+  _______, _______, _______, _______, _______, _______,                     _______, _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, _______, _______,                     _______, _______, UML_UE,  _______, _______, _______,
+  _______, UML_AE , _______, GER_SZ , _______, _______,                     _______, _______, EU_EUR,  _______, UML_OE , _______,
+  _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______, _______,
+                             _______, _______, _______, _______,   _______, _______, _______, _______
 ),
 
 };
