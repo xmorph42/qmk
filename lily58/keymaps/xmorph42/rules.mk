@@ -10,6 +10,9 @@ RGBLIGHT_ENABLE = no        # Enable WS2812 RGB underlight.
 SWAP_HANDS_ENABLE = no      # Enable one-hand typing
 OLED_ENABLE= yes     # OLED display
 
+# -- xmorph42 -----------------------------------------------------------------------------
+LTO_ENABLE = yes
+
 # use 42keebs frood 
 CONVERT_TO=promicro_rp2040
 

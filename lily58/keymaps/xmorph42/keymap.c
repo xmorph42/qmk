@@ -15,8 +15,9 @@
 //#define COLEMAK_ENABLE
 //#define WORKMAN_ENABLE
 //#define MIRYOKU_ENABLE
-#define MTGAP_ENABLE
-#define BASE_LAYERS 4    // the first n layers are base layers
+//#define MTGAP_ENABLE
+
+#define BASE_LAYERS 3    // the first n layers are base layers
 
 #ifdef RP2040
 #else  // maybe not enough space to use all features
@@ -35,10 +36,13 @@ enum xmorph_layers {
 #ifdef MIRYOKU_ENABLE
     _MIRYOKU,
 #endif
+#ifdef MTGAP_ENABLE
     _MTGAP,
+#endif
     _LOWER,
     _RAISE,
     _ADJUST,
+    _LOC,     // locale layer (umlaut)
 };
 
 enum custom_keycodes {
@@ -62,7 +66,8 @@ enum custom_keycodes {
 // ---------------------------------------------------------------------------------------------
 // TAP DANCE - when a key has different meanings when pressed once or twice
 // ---------------------------------------------------------------------------------------------
-#if 0  // checking if this collides with home-row mods
+#ifdef SOFLE  // checking if this collides with home-row mods
+
 enum custom_tapdance {
     TD_PLAY,   // handled to control audio play keys
     TD_HOME,
@@ -77,6 +82,20 @@ tap_dance_action_t tap_dance_actions[] = {
 //define convenient aliases to simplify usage in key layouts
 #define KC_TPLY TD(TD_PLAY)
 #define KC_THME TD(TD_HOME)
+
+// key or rotator for left and right: rotator
+#define KR_LFT KC_MUTE
+#define KR_RGT KC_THME
+// Sofle has 2 additinal keys compared to lily
+#define SOFLE_L  KC_LGUI
+#define SOFLE_R  KC_RGUI
+#else
+// key or rotator for left and right: key
+#define KR_LFT KC_LGUI
+#define KR_RGT KC_RGUI
+// Sofle has 2 additinal keys compared to lily
+#define SOFLE_L  
+#define SOFLE_R 
 #endif
 
 // ---------------------------------------------------------------------------------------------
@@ -192,6 +211,12 @@ enum Q_GACS{
 #define M_GUI_R RGUI_T(KC_R)
 
 // ---------------------------------------------------------------------------------------------
+#define UML_AE RALT(KC_Q)
+#define UML_OE RALT(KC_P)
+#define UML_UE RALT(KC_Y)
+#define GER_SZ RALT(KC_S)
+#define EU_EUR RALT(KC_5)
+// ---------------------------------------------------------------------------------------------
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -203,20 +228,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  | Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Esc  |   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |      |   GUI|   ALT|   CTL|   SFT|      |       |    |       |      |   SFT|   CTL|   ALT|   GUI|      |   
+ * |      |   GUI|   ALT|   CTL|   SFT|      |KY_LFT |    | KY_RGT|      |   SFT|   CTL|   ALT|   GUI|      |   
  * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `---------------------------'           '------''---------------------'
+ * `-----------------------------------------/       /    \       \-----------------------------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 [_QWERTY] = LAYOUT(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5,                           KC_6      , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
   KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T,                           KC_Y      , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC,
   KC_ESC , GUI_A  , ALT_S  , CTL_D  , SFT_F  , KC_G,                           KC_H      , SFT_J  , CTL_K  , ALT_L  , GUI_SCLN, KC_QUOT,
-  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B,       KC_LGUI,   KC_RGUI, KC_N      , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-                             KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT
+  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B,       KR_LFT,    KR_RGT , KC_N      , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
+                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
 ),
 
 /*
@@ -227,19 +252,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Tab  |  ; : |  , < |  . > |   P  |   Y  |                    |   F  |   G  |   C  |   R  |   L  | Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Esc  |   A  |   O  |   E  |   U  |   I  |-------.    ,-------|   D  |   H  |   T  |   N  |   S  |  - _ |
- * |------+------+------+------+------+------|  MUTE |    |       |------+------+------+------+------+------|
+ * |------+------+------+------+------+------| KR_LFT|    | KR_RGT|------+------+------+------+------+------|
  * |LShift|  ' " |   Q  |   J  |   K  |   X  |-------|    |-------|   B  |   M  |   W  |   V  |   Z  |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            | LGUI | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt | RGUI |
- *            |      |      |      |      |/       /         \      \ |      |      |      |      |
- *            `-----------------------------------'           '------''---------------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 [_DVORAK] = LAYOUT(
-  KC_DLR , KC_HASH, KC_LBRC, KC_LCBR, KC_LPRN, KC_AMPR,                        KC_EQL    , KC_RPRN, KC_RCBR, KC_RBRC, KC_ASTR, KC_EXLM,
-  KC_TAB , KC_SCLN, KC_COMM, KC_DOT , KC_P   , KC_Y,                           KC_F      , KC_G   , KC_C   , KC_R   , KC_L   , KC_BSPC,
-  KC_ESC , KC_A   , KC_O   , KC_E   , KC_U   , KC_I,                           KC_D      , KC_H   , KC_T   , KC_N   , KC_S   , KC_MINS,
-  KC_LSFT, KC_QUOT, KC_Q   , KC_J   , KC_K   , KC_X,       KC_LGUI,   KC_RGUI, KC_B      , KC_M   , KC_W   , KC_V   , KC_Z   , KC_RSFT,
-                             KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT
+  KC_DLR , KC_HASH, KC_LBRC, KC_LCBR, KC_LPRN, KC_AMPR,                       KC_EQL    , KC_RPRN, KC_RCBR, KC_RBRC, KC_ASTR, KC_EXLM,
+  KC_TAB , KC_SCLN, KC_COMM, KC_DOT , KC_P   , KC_Y,                          KC_F      , KC_G   , KC_C   , KC_R   , KC_L   , KC_BSPC,
+  KC_ESC , KC_A   , KC_O   , KC_E   , KC_U   , KC_I,                          KC_D      , KC_H   , KC_T   , KC_N   , KC_S   , KC_MINS,
+  KC_LSFT, KC_QUOT, KC_Q   , KC_J   , KC_K   , KC_X,       KR_LFT,   KR_RGT , KC_B      , KC_M   , KC_W   , KC_V   , KC_Z   , KC_RSFT,
+                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
 ),
 
 /*
@@ -254,17 +279,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   K  |   M  |  , < |  . > |  / ? |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `---------------------------'           '------''---------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 #ifdef COLEMAK_ENABLE
 [_COLEMAK] = LAYOUT(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6,       KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
   KC_TAB,  KC_Q   , KC_W   , KC_F   , KC_P   , KC_G      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
   KC_ESC , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_D      ,                     KC_H,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, KC_QUOT,
-  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B      , KC_LGUI,   KC_RGUI, KC_K,       KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-                             KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT,    KC_SPC,  MO(_RAISE), KC_RCTL, KC_RALT
+  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B      , KR_LFT,   KR_RGT, KC_K,       KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
+                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
 ),
 #endif
 
@@ -280,16 +305,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   D  |   V  |-------|    |-------|   K  |   H  |  , < |  . > |  / ? |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `---------------------------'           '------''---------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 [_COLEMAK_DH] = LAYOUT(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6,       KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
   KC_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
-  KC_ESC , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                     KC_M,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, KC_QUOT,
+LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                     KC_M,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, LT(_LOC, KC_QUOT),
   KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , KC_LGUI,   KC_RGUI, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-                             KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT,    KC_SPC,  MO(_RAISE), KC_RCTL, KC_RALT
+                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
 ),
 /*
  * WORKMAN
@@ -302,17 +327,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|       |    | MUTE  |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   M  |   C  |   V  |-------|    |-------|   K  |   L  |   ,  |   .  |   /  |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `---------------------------'           '------''---------------------`
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 #ifdef WORKMAN_ENABLE
 [_WORKMAN] = LAYOUT(
   KC_GRV,  KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                            KC_6,     KC_7,     KC_8,    KC_9,   KC_0,    KC_PSCR,
   KC_TAB,  KC_Q,   KC_D,    KC_R,    KC_W,    KC_B,                            KC_J,     KC_F,     KC_U,    KC_P,   KC_SCLN, KC_BSPC,
   KC_ESC,  KC_A,   KC_S,    KC_H,    KC_T,    KC_G,                            KC_Y,     KC_N,     KC_E,    KC_O,   KC_I,    KC_QUOT,
-  KC_LSFT, KC_Z,   KC_X,    KC_M,    KC_C,    KC_V,     KC_LGUI,      KC_RGUI, KC_K,     KC_L,     KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
-                            KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT,       KC_SPC, MO(_RAISE), KC_RCTL, KC_RALT
+  KC_LSFT, KC_Z,   KC_X,    KC_M,    KC_C,    KC_V,     KR_LFT,      KR_RGT, KC_K,     KC_L,     KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
+                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
 ),
 #endif
 
@@ -332,17 +357,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------| LGUI  |    | RGUI  |------+------+------+------+------+------|
  * |      |   Z  |   X  |   C  |   D  |   V  |-------|    |-------|   K  |   H  |  , < |  . > |  / ? |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Space  /       \Enter \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `---------------------------'           '------''---------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 #ifdef MIRYOKU_ENABLE
 [_MIRYOKU] = LAYOUT(
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX   ,                     XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   XXXXXXX, KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, XXXXXXX,
   KC_ESC,  M_GUI_A, M_ALT_R, M_CTL_S, M_SFT_T, KC_G      ,                     KC_M,       M_SFT_N, M_CTL_E, M_ALT_I, M_GUI_O, XXXXXXX,
-  XXXXXXX, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , KC_LGUI,   KC_RGUI, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, XXXXXXX,
-                             KC_LALT, KC_LCTL, MO(_LOWER), KC_SPC,    KC_ENT,  MO(_RAISE), KC_RCTL, KC_RALT
+  XXXXXXX, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , KR_LFT,   KR_RGT, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, XXXXXXX,
+                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_SPC,   KC_ENT , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
 ),
 #endif
 
@@ -359,17 +384,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------| LGUI  |    | RGUI  |------+------+------+------+------+------|
  * |      |   Y  |   B  |   Z  |   .  |   ;  |-------|    |-------|   B  |   F  |   G  |   V  |   X  |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Space  /       \Enter \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `---------------------------'           '------''---------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 #ifdef MTGAP_ENABLE
 [_MTGAP] = LAYOUT(
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6      , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
   KC_TAB,  KC_J   , KC_P   , KC_O   , KC_U   , KC_X      ,                     KC_K      , KC_D   , KC_L   , KC_C   , KC_O   , KC_BSPC,
   KC_ESC,  M_GUI_I, M_ALT_N, M_CTL_E, M_SFT_A, KC_COMM   ,                     KC_M      , M_SFT_H, M_CTL_T, M_ALT_S, M_GUI_R, KC_QUOT,
-  KC_LSFT, KC_Y   , KC_B   , KC_Z   , KC_DOT , KC_SCLN   , KC_LGUI,   KC_RGUI, KC_B      , KC_F   , KC_G   , KC_V   , KC_X   , KC_RSFT,
-                             KC_LALT, KC_LCTL, MO(_LOWER), KC_SPC,    KC_ENT,  MO(_RAISE), KC_RCTL, KC_RALT
+  KC_LSFT, KC_Y   , KC_B   , KC_Z   , KC_DOT , KC_SCLN   , KR_LFT,   KR_RGT, KC_B      , KC_F   , KC_G   , KC_V   , KC_X   , KC_RSFT,
+                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_SPC ,   KC_ENT , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
 ),
 #endif
 /* lower
@@ -383,16 +408,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
  * | Shift|  =   |  -   |  +   |   {  |   }  |-------|    |-------|   [  |   ]  |   ;  |   :  |   \  | Shift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   ``----------------------------------'           '------''---------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 [_LOWER] = LAYOUT(
   _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,                      KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11 ,
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_F12 ,
   _______, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
   _______, KC_EQL , KC_MINS, KC_PLUS, KC_LCBR, KC_RCBR, _______,    _______, KC_LBRC, KC_RBRC, KC_SCLN, KC_COLN, KC_BSLS, _______,
-                             _______, _______, _______, _______,    _______, _______, _______, _______
+                    SOFLE_L  _______, _______, _______, _______,    _______, _______, _______, _______ SOFLE_R
 ),
 
 /* RAISE
@@ -405,16 +430,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
  * |      | Undo |  Cut | Copy | Paste|      |-------|    |-------|      | Home |      | End |      | PgDn |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `---------------------------'           '------''---------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 [_RAISE] = LAYOUT(
   KC_CYCLE, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD , KC_VOLU,                     _______, _______ , _______, KC_PSCR,  KC_SCRL , KC_PAUS,
   _RGB_TOG, KC_INS , KC_PSCR, KC_APP , XXXXXXX , XXXXXXX,                     XXXXXXX, KC_PRVWD, XXXXXXX, KC_NXTWD, KC_DLINE, KC_BSPC,
   _RGB_MOD, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
   _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, XXXXXXX, _______,   _______, XXXXXXX, KC_LSTRT, XXXXXXX, KC_LEND , _______ , KC_PGDN,
-                              _______, _______ , _______, _______,   _______, _______, _______ , _______
+                    SOFLE_L  _______, _______, _______, _______,    _______, _______, _______, _______ SOFLE_R
 ),
 
 /* ADJUST
@@ -427,16 +452,38 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------|    |-------|      | PREV | PLAY | NEXT |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LCTR |LOWER | /Enter  /       \Space \  |RAISE | RCTR | RAlt |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `---------------------------'           '------''---------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
  */
 [_ADJUST] = LAYOUT(
   XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   KC_QWERTY, KC_DVORAK, KC_COLEMAK, KC_COLEMAK_DH, XXXXXXX,    XXXXXXX,                     XXXXXXX, KC_BTN1, XXXXXXX, KC_BTN2, XXXXXXX, XXXXXXX,
   QK_BOOT,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX, XXXXXXX,
   XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
-                                    _______,       _______,    _______, _______,   _______, _______, _______, _______
+                        SOFLE_L     _______,       _______,    _______, _______,   _______, _______, _______, _______ SOFLE_R
+),
+
+/* LOC
+ * ,-----------------------------------------.                    ,-----------------------------------------.
+ * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |      | ä Ä  |  ß   |      |      |      |-------'    '-------|      |      |      |      |      |      |
+ * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |-------|    |-------|      |      |      |      |      |      |
+ * `-----------------------------------------/       /     \      \-----------------------------------------'
+ *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
+ *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~------------------------------------'           '------''----------------------------'
+ */
+[_LOC] = LAYOUT(
+  _______, _______, _______, _______, _______, _______,                     _______, _______, _______, _______, _______, _______,
+  _______, _______, _______, _______, _______, _______,                     _______, _______, UML_UE,  _______, _______, _______,
+  _______, UML_AE , _______, GER_SZ , _______, _______,                     _______, _______, EU_EUR,  _______, UML_OE , _______,
+  _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______, _______,
+                    SOFLE_L  _______, _______, _______, _______,   _______, _______, _______, _______ SOFLE_R
 ),
 
 };
@@ -540,14 +587,12 @@ static void print_status_narrow(void) {
 #endif
 #ifdef MIRYOKU_ENABLE
         case _MIRYOKU:
-            oled_write_P(PSTR("Base\n"), false);
-            break;
 #endif
 #ifdef MTGAP_ENABLE
         case _MTGAP:
+#endif
             oled_write_P(PSTR("Base\n"), false);
             break;
-#endif
         case _RAISE:
             oled_write_P(PSTR("Raise"), false);
             break;
@@ -556,6 +601,9 @@ static void print_status_narrow(void) {
             break;
         case _ADJUST:
             oled_write_P(PSTR("Adj\n"), false);
+            break;
+        case _LOC:
+            oled_write_P(PSTR("Umlt\n"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);

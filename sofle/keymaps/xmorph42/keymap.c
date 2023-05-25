@@ -587,14 +587,12 @@ static void print_status_narrow(void) {
 #endif
 #ifdef MIRYOKU_ENABLE
         case _MIRYOKU:
-            oled_write_P(PSTR("Base\n"), false);
-            break;
 #endif
 #ifdef MTGAP_ENABLE
         case _MTGAP:
+#endif
             oled_write_P(PSTR("Base\n"), false);
             break;
-#endif
         case _RAISE:
             oled_write_P(PSTR("Raise"), false);
             break;
@@ -603,6 +601,9 @@ static void print_status_narrow(void) {
             break;
         case _ADJUST:
             oled_write_P(PSTR("Adj\n"), false);
+            break;
+        case _LOC:
+            oled_write_P(PSTR("Umlt\n"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undef"), false);
