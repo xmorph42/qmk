@@ -12,32 +12,22 @@
    #define _RGB_MOD XXXXXXX
 #endif
 
-//#define COLEMAK_ENABLE
-//#define WORKMAN_ENABLE
 //#define MIRYOKU_ENABLE
-//#define MTGAP_ENABLE
 
-#define BASE_LAYERS 3    // the first n layers are base layers
+#ifndef MIRYOKU_ENABLE
+#define BASE_LAYERS 1    // the first n layers are base layers
+#else
+#define BASE_LAYERS 2    // the first n layers are base layers
+#endif
 
 #ifdef RP2040
 #else  // maybe not enough space to use all features
 #endif
 
 enum xmorph_layers {
-    _QWERTY,
-    _DVORAK,
-#ifdef COLEMAK_ENABLE
-    _COLEMAK,
-#endif
     _COLEMAK_DH,
-#ifdef WORKMAN_ENABLE
-    _WORKMAN,
-#endif
 #ifdef MIRYOKU_ENABLE
     _MIRYOKU,
-#endif
-#ifdef MTGAP_ENABLE
-    _MTGAP,
 #endif
     _LOWER,
     _RAISE,
@@ -46,15 +36,8 @@ enum xmorph_layers {
 };
 
 enum custom_keycodes {
-    KC_QWERTY = SAFE_RANGE,
-    KC_DVORAK,
-    KC_COLEMAK,
-    KC_COLEMAK_DH,
-#ifdef WORKMAN_ENABLE
-    KC_WORKMAN,
-#endif
+    KC_COLEMAK_DH = SAFE_RANGE,
     KC_MIRYOKU,
-    KC_MTGAP,
     KC_PRVWD,
     KC_NXTWD,
     KC_LSTRT,
@@ -98,84 +81,6 @@ tap_dance_action_t tap_dance_actions[] = {
 #define SOFLE_R 
 #endif
 
-// ---------------------------------------------------------------------------------------------
-// ------ define dvorak shift keys -------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
-// !!! TO WORK YOU NEED TO ADD THE FOLLOWING TO rules.mk
-//     KEY_OVERRIDE_ENABLE = yes  # Allows e.g. custom shift keys (programmers dvorak).
-//
-#include "process_key_override.h"
-
-const key_override_t dvp_shift_keys[] = {
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_DLR,  KC_TILD, 0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_HASH, KC_PERC, 0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_LBRC, KC_7,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_LCBR, KC_5,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_LPRN, KC_3,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_AMPR, KC_1,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_EQL,  KC_9,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_RPRN, KC_0,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_RCBR, KC_2,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_RBRC, KC_4,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_ASTR, KC_6,    0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_EXLM, KC_8,    0x02),
-   // 2nd line
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_SCLN, KC_COLN, 0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_COMM, KC_LT,   0x02),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_DOT,  KC_GT,   0x02),
-   // 3rd line
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_MINS, KC_UNDS, 0x02),
-   // 4th line
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_QUOT, KC_DQT,  0x02),
-   // Dvorak Shift of RAISE layer
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_HASH, KC_GRV,   0x04),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_SLSH, KC_QUES,  0x04),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_AT,   KC_CIRC,  0x04),
-   ko_make_with_layers(MOD_MASK_SHIFT, KC_BSLS, KC_PIPE,  0x04),
-};
-
-// This globally defines all key overrides to be used
-const key_override_t **key_overrides = (const key_override_t *[]){
-    &dvp_shift_keys[0],
-    &dvp_shift_keys[1],
-    &dvp_shift_keys[2],
-    &dvp_shift_keys[3],
-    &dvp_shift_keys[4],
-    &dvp_shift_keys[5],
-    &dvp_shift_keys[6],
-    &dvp_shift_keys[7],
-    &dvp_shift_keys[8],
-    &dvp_shift_keys[9],
-    &dvp_shift_keys[10],
-    &dvp_shift_keys[11],
-    &dvp_shift_keys[12],
-    &dvp_shift_keys[13],
-    &dvp_shift_keys[14],
-    &dvp_shift_keys[15],
-    &dvp_shift_keys[16],
-    &dvp_shift_keys[17],
-    &dvp_shift_keys[18],
-    &dvp_shift_keys[19],
-    &dvp_shift_keys[20],
-    NULL // Null terminate the array of overrides!
-};
-
-// ---------------------------------------------------------------------------------------------
-
-// Qwerty Home-Row-Mods GACS (GUI,ALT,CTL,SFT)
-enum Q_GACS{
-   // left hand
-   GUI_A = LGUI_T(KC_A),
-   ALT_S = LALT_T(KC_S),
-   CTL_D = LCTL_T(KC_D),
-   SFT_F = LSFT_T(KC_F),
-   // right hand
-   SFT_J = RSFT_T(KC_J),
-   CTL_K = RCTL_T(KC_K),
-   ALT_L = LALT_T(KC_L),
-   GUI_SCLN = RGUI_T(KC_SCLN)
-};
-
 // Left-hand colemak home row mods
 #define C_GUI_A LGUI_T(KC_A)
 #define C_ALT_R LALT_T(KC_R)
@@ -200,16 +105,6 @@ enum Q_GACS{
 #define M_ALT_I RALT_T(KC_I)
 #define M_GUI_O RGUI_T(KC_O)
 
-// Left-hand MTGAP home row mods
-#define M_GUI_I LGUI_T(KC_I)
-#define M_ALT_N LALT_T(KC_N)
-#define M_SFT_A LSFT_T(KC_A)
-// Right-hand MTGAP home row mods
-#define M_SFT_H RSFT_T(KC_H)
-#define M_CTL_T RCTL_T(KC_T)
-#define M_ALT_S RALT_T(KC_S)
-#define M_GUI_R RGUI_T(KC_R)
-
 // ---------------------------------------------------------------------------------------------
 #define UML_AE RALT(KC_Q)
 #define UML_OE RALT(KC_P)
@@ -220,79 +115,6 @@ enum Q_GACS{
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-/*
- * QWERTY
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |  `   |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  | - _  |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  | Bspc |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Esc  |   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |      |   GUI|   ALT|   CTL|   SFT|      |KY_LFT |    | KY_RGT|      |   SFT|   CTL|   ALT|   GUI|      |   
- * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |RShift|
- * `-----------------------------------------/       /    \       \-----------------------------------------'
- *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
- *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
- *            ~------------------------------------'           '------''----------------------------'
- */
-[_QWERTY] = LAYOUT(
-  KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5,                           KC_6      , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
-  KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T,                           KC_Y      , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC,
-  KC_ESC , GUI_A  , ALT_S  , CTL_D  , SFT_F  , KC_G,                           KC_H      , SFT_J  , CTL_K  , ALT_L  , GUI_SCLN, KC_QUOT,
-  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B,       KR_LFT,    KR_RGT , KC_N      , KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
-),
-
-/*
- * DVORAK
- * ,-----------------------------------------.                     ,----------------------------------------.
- * | $ ~  |  # % |  [ 7 | { 5  | } 3  |  ( 1 |                    |  = 9 |  * 0 |  ) 2 |  + 4 |  ] 6 |  ! 8 |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |  ; : |  , < |  . > |   P  |   Y  |                    |   F  |   G  |   C  |   R  |   L  | Bspc |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Esc  |   A  |   O  |   E  |   U  |   I  |-------.    ,-------|   D  |   H  |   T  |   N  |   S  |  - _ |
- * |------+------+------+------+------+------| KR_LFT|    | KR_RGT|------+------+------+------+------+------|
- * |LShift|  ' " |   Q  |   J  |   K  |   X  |-------|    |-------|   B  |   M  |   W  |   V  |   Z  |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
- *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
- *            ~------------------------------------'           '------''----------------------------'
- */
-[_DVORAK] = LAYOUT(
-  KC_DLR , KC_HASH, KC_LBRC, KC_LCBR, KC_LPRN, KC_AMPR,                       KC_EQL    , KC_RPRN, KC_RCBR, KC_RBRC, KC_ASTR, KC_EXLM,
-  KC_TAB , KC_SCLN, KC_COMM, KC_DOT , KC_P   , KC_Y,                          KC_F      , KC_G   , KC_C   , KC_R   , KC_L   , KC_BSPC,
-  KC_ESC , KC_A   , KC_O   , KC_E   , KC_U   , KC_I,                          KC_D      , KC_H   , KC_T   , KC_N   , KC_S   , KC_MINS,
-  KC_LSFT, KC_QUOT, KC_Q   , KC_J   , KC_K   , KC_X,       KR_LFT,   KR_RGT , KC_B      , KC_M   , KC_W   , KC_V   , KC_Z   , KC_RSFT,
-                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
-),
-
-/*
- * COLEMAK-VANILLA
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |  ` ~ |  1 ! |  2 @ |  3 # |  4 $ |  5 % |                    |  6 ^ |  7 & |  8 * |  9 ( |  0 ) | ` ~  |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | TAB  |   Q  |   W  |   F  |   P  |   G  |                    |   J  |   L  |   U  |   Y  |  ; : | Bspc |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | ESC  |   A  |   R  |   S  |   T  |   D  |-------.    ,-------|   H  |   N  |   E  |   I  |   O  | ' "  |
- * |      |   GUI|   ALT|   SFT|   CTL|      |       |    |       |      |   CTL|   SFT|   ALT|   GUI|      |   
- * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   K  |   M  |  , < |  . > |  / ? |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
- *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
- *            ~------------------------------------'           '------''----------------------------'
- */
-#ifdef COLEMAK_ENABLE
-[_COLEMAK] = LAYOUT(
-  KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6,       KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
-  KC_TAB,  KC_Q   , KC_W   , KC_F   , KC_P   , KC_G      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
-  KC_ESC , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_D      ,                     KC_H,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, KC_QUOT,
-  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B      , KR_LFT,   KR_RGT, KC_K,       KC_M   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
-),
-#endif
-
 /*
  * COLEMAK-DH
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -316,30 +138,6 @@ LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,              
   KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , KC_LGUI,   KC_RGUI, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
                     SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
 ),
-/*
- * WORKMAN
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |  `   |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  | Prnt |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Tab  |   Q  |   D  |   R  |   W  |   B  |                    |   J  |   F  |   U  |   P  |   ;  | Bspc |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | Esc  |   A  |   S  |   H  |   T  |   G  |-------.    ,-------|   Y  |   N  |   E  |   O  |   I  |  '   |
- * |------+------+------+------+------+------|       |    | MUTE  |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   M  |   C  |   V  |-------|    |-------|   K  |   L  |   ,  |   .  |   /  |RShift|
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
- *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
- *            ~------------------------------------'           '------''----------------------------'
- */
-#ifdef WORKMAN_ENABLE
-[_WORKMAN] = LAYOUT(
-  KC_GRV,  KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                            KC_6,     KC_7,     KC_8,    KC_9,   KC_0,    KC_PSCR,
-  KC_TAB,  KC_Q,   KC_D,    KC_R,    KC_W,    KC_B,                            KC_J,     KC_F,     KC_U,    KC_P,   KC_SCLN, KC_BSPC,
-  KC_ESC,  KC_A,   KC_S,    KC_H,    KC_T,    KC_G,                            KC_Y,     KC_N,     KC_E,    KC_O,   KC_I,    KC_QUOT,
-  KC_LSFT, KC_Z,   KC_X,    KC_M,    KC_C,    KC_V,     KR_LFT,      KR_RGT, KC_K,     KC_L,     KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
-                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
-),
-#endif
 
 /*
  * My modified Miryoku
@@ -371,32 +169,6 @@ LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,              
 ),
 #endif
 
-/*
- * MTGandP
- *
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |   J  |   P  |   O  |   U  |   X  |                    |   K  |   D  |   L  |   C  |   Q  |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | ESC  |   I  |   N  |   E  |   A  |   ,  |-------.    ,-------|   M  |   H  |   T  |   S  |   R  |      |
- * |      |   GUI|   ALT|   CTL|   SFT|      |       |    |       |      |   SFT|   CTL|   ALT|   GUI|      |   
- * |------+------+------+------+------+------| LGUI  |    | RGUI  |------+------+------+------+------+------|
- * |      |   Y  |   B  |   Z  |   .  |   ;  |-------|    |-------|   B  |   F  |   G  |   V  |   X  |      |
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
- *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
- *            ~------------------------------------'           '------''----------------------------'
- */
-#ifdef MTGAP_ENABLE
-[_MTGAP] = LAYOUT(
-  KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6      , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
-  KC_TAB,  KC_J   , KC_P   , KC_O   , KC_U   , KC_X      ,                     KC_K      , KC_D   , KC_L   , KC_C   , KC_O   , KC_BSPC,
-  KC_ESC,  M_GUI_I, M_ALT_N, M_CTL_E, M_SFT_A, KC_COMM   ,                     KC_M      , M_SFT_H, M_CTL_T, M_ALT_S, M_GUI_R, KC_QUOT,
-  KC_LSFT, KC_Y   , KC_B   , KC_Z   , KC_DOT , KC_SCLN   , KR_LFT,   KR_RGT, KC_B      , KC_F   , KC_G   , KC_V   , KC_X   , KC_RSFT,
-                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_SPC ,   KC_ENT , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
-),
-#endif
 /* lower
  *
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -446,7 +218,7 @@ LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,              
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |QWERTY|DVORAK|COLEMK|CLMKDH|MIRYOK|      |                    |      |MsBtn1|      |MsBtn2|      |      |
+ * |      |      |      |CLMKDH|MIRYOK|      |                    |      |MsBtn1|      |MsBtn2|      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | BOOT |      |      |      |      |      |-------.    ,-------|MsLeft| MsDn | MsUP |MsRght|      |      |
  * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
@@ -458,7 +230,7 @@ LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,              
  */
 [_ADJUST] = LAYOUT(
   XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  KC_QWERTY, KC_DVORAK, KC_COLEMAK, KC_COLEMAK_DH, XXXXXXX,    XXXXXXX,                     XXXXXXX, KC_BTN1, XXXXXXX, KC_BTN2, XXXXXXX, XXXXXXX,
+  XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     XXXXXXX, KC_BTN1, XXXXXXX, KC_BTN2, XXXXXXX, XXXXXXX,
   QK_BOOT,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX, XXXXXXX,
   XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
                         SOFLE_L     _______,       _______,    _______, _______,   _______, _______, _______, _______ SOFLE_R
@@ -540,33 +312,12 @@ static void print_status_narrow(void) {
     oled_write_P(PSTR("\n\n"), false);
 
     switch (get_highest_layer(default_layer_state)) {
-        case _QWERTY:
-            oled_write_ln_P(PSTR("Qwrt\n"), false);
-            break;
-        case _DVORAK:
-            oled_write_ln_P(PSTR("Dvrk\n"), false);
-            break;
-#ifdef COLEMAK_ENABLE
-        case _COLEMAK:
-            oled_write_ln_P(PSTR("Clmk\n"), false);
-            break;
-#endif
         case _COLEMAK_DH:
             oled_write_ln_P(PSTR("ClmkD"), false);
             break;
-#ifdef WORKMAN_ENABLE
-        case _WORKMAN:
-            oled_write_ln_P(PSTR("Wrkmn"), false);
-            break;
-#endif
 #ifdef MIRYOKU_ENABLE
         case _MIRYOKU:
             oled_write_ln_P(PSTR("Mryok"), false);
-            break;
-#endif
-#ifdef MTGAP_ENABLE
-        case _MTGAP:
-            oled_write_ln_P(PSTR("MTGAP"), false);
             break;
 #endif
         default:
@@ -576,20 +327,9 @@ static void print_status_narrow(void) {
     // Print current layer
     oled_write_ln_P(PSTR("LAYER"), false);
     switch (get_highest_layer(layer_state)) {
-        case _QWERTY:
-        case _DVORAK:
-#ifdef COLEMAK_ENABLE
-        case _COLEMAK:
-#endif
         case _COLEMAK_DH:
-#ifdef WORKMAN_ENABLE
-        case _WORKMAN:
-#endif
 #ifdef MIRYOKU_ENABLE
         case _MIRYOKU:
-#endif
-#ifdef MTGAP_ENABLE
-        case _MTGAP:
 #endif
             oled_write_P(PSTR("Base\n"), false);
             break;
@@ -677,46 +417,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
          }
          return true;
-        case KC_QWERTY:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_QWERTY);
-            }
-            return false;
-        case KC_DVORAK:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_DVORAK);
-            }
-            return false;
-#ifdef COLEMAK_ENABLE
-        case KC_COLEMAK:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_COLEMAK);
-            }
-            return false;
-#endif
         case KC_COLEMAK_DH:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_COLEMAK_DH);
             }
             return false;
-#ifdef WORKMAN_ENABLE
-        case KC_WORKMAN:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_WORKMAN);
-            }
-            return false;
-#endif
 #ifdef MIRYOKU_ENABLE
         case KC_MIRYOKU:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_MIRYOKU);
-            }
-            return false;
-#endif
-#ifdef MTGAP_ENABLE
-        case KC_MTGAP:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_MTGAP);
             }
             return false;
 #endif
