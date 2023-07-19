@@ -47,15 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Configure the global tapping term (default: 200ms)
 // 2023-03-07:PBU:TAPPING_TERM=100 is too short for homerow mods to work for me
-#define TAPPING_TERM 200
-
-/// Prevent normal rollover on alphas from accidentally triggering mods.
-/* 2023-03-07:PBU:Depending to https://precondition.github.io/home-row-mods#ignore-mod-tap-interrupt 
-* this is needed for home-row mods
-* but regarding https://github.com/qmk/qmk_firmware/blob/master/docs/ChangeLog/20230226.md 
-* it is now deprecated as it becomes the default
-*/
-#define IGNORE_MOD_TAP_INTERRUPT
+#define TAPPING_TERM 170
 
 #undef RGBLED_NUM
 #define RGBLIGHT_EFFECT_BREATHING
