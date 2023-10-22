@@ -12,13 +12,7 @@
    #define _RGB_MOD XXXXXXX
 #endif
 
-//#define MIRYOKU_ENABLE
-
-#ifndef MIRYOKU_ENABLE
 #define BASE_LAYERS 1    // the first n layers are base layers
-#else
-#define BASE_LAYERS 2    // the first n layers are base layers
-#endif
 
 #ifdef RP2040
 #else  // maybe not enough space to use all features
@@ -26,18 +20,14 @@
 
 enum xmorph_layers {
     _COLEMAK_DH,
-#ifdef MIRYOKU_ENABLE
-    _MIRYOKU,
-#endif
     _LOWER,
     _RAISE,
     _ADJUST,
-    _LOC,     // locale layer (umlaut)
+    _LOC,     // locale layer (umlauts)
 };
 
 enum custom_keycodes {
     KC_COLEMAK_DH = SAFE_RANGE,
-    KC_MIRYOKU,
     KC_PRVWD,
     KC_NXTWD,
     KC_LSTRT,
@@ -77,8 +67,8 @@ tap_dance_action_t tap_dance_actions[] = {
 #define KR_LFT KC_LGUI
 #define KR_RGT KC_RGUI
 // Sofle has 2 additinal keys compared to lily
-#define SOFLE_L  
-#define SOFLE_R 
+#define SOFLE_L
+#define SOFLE_R
 #endif
 
 // Left-hand colemak home row mods
@@ -113,7 +103,6 @@ tap_dance_action_t tap_dance_actions[] = {
 #define EU_EUR RALT(KC_5)
 // ---------------------------------------------------------------------------------------------
 
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * COLEMAK-DH
@@ -123,51 +112,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | TAB  |   Q  |   W  |   F  |   P  |   B  |                    |   J  |   L  |   U  |   Y  |  ; : | Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | ESC  |   A  |   R  |   S  |   T  |   G  |-------.    ,-------|   M  |   N  |   E  |   I  |   O  | ' "  |
- * |      |   GUI|   ALT|   SFT|   CTL|      |       |    |       |      |   CTL|   SFT|   ALT|   GUI|      |   
- * |------+------+------+------+------+------|  n/a  |    | n/a   |------+------+------+------+------+------|
+ * |Locale|   GUI|   ALT|   SFT|   CTL|      |       |    |       |      |   CTL|   SFT|   ALT|   GUI|Locale|
+ * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |LShift|   Z  |   X  |   C  |   D  |   V  |-------|    |-------|   K  |   H  |  , < |  . > |  / ? |RShift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
- *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
+ *            ~       ~      |      |      |/       /         \      \ |Bspc  |      |      ~       ~
  *            ~------------------------------------'           '------''----------------------------'
  */
 [_COLEMAK_DH] = LAYOUT(
-  KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                     KC_6,       KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
-  KC_TAB , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
-LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                     KC_M,       C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, LT(_LOC, KC_QUOT),
-  KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , XXXXXXX,  XXXXXXX, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,   KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
+  KC_GRV        , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                    KC_6     , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
+  KC_TAB        , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                    KC_J     , KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
+LT(_LOC, KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                    KC_M     , C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, LT(_LOC, KC_QUOT),
+  KC_LSFT       , KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , _______,  _______, KC_K     , KC_H   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
+                           SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , LT(_RAISE, KC_BSPC), KC_RCTL, KC_RALT SOFLE_R
 ),
-
-/*
- * My modified Miryoku
- * Miryoku (https://github.com/manna-harbour/miryoku/) is an ergonomic, minimal, orthogonal,
- * and universal keyboard layout.
- *
- *
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |   Q  |   W  |   F  |   P  |   B  |                    |   J  |   L  |   U  |   Y  |  ' " |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | ESC  |   A  |   R  |   S  |   T  |   G  |-------.    ,-------|   M  |   N  |   E  |   I  |   O  |      |
- * |      |   GUI|   ALT|   CTL|   SFT|      |       |    |       |      |   SFT|   CTL|   ALT|   GUI|      |   
- * |------+------+------+------+------+------| LGUI  |    | RGUI  |------+------+------+------+------+------|
- * |      |   Z  |   X  |   C  |   D  |   V  |-------|    |-------|   K  |   H  |  , < |  . > |  / ? |      |
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
- *            ~       ~      |      |      |/       /         \      \ |      |      |      ~       ~
- *            ~------------------------------------'           '------''----------------------------'
- */
-#ifdef MIRYOKU_ENABLE
-[_MIRYOKU] = LAYOUT(
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX   ,                     XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  XXXXXXX, KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                     KC_J,       KC_L   , KC_U   , KC_Y   , KC_SCLN, XXXXXXX,
-  KC_ESC,  M_GUI_A, M_ALT_R, M_CTL_S, M_SFT_T, KC_G      ,                     KC_M,       M_SFT_N, M_CTL_E, M_ALT_I, M_GUI_O, XXXXXXX,
-  XXXXXXX, KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , KR_LFT,   KR_RGT, KC_K,       KC_H   , KC_COMM, KC_DOT , KC_SLSH, XXXXXXX,
-                    SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_SPC,   KC_ENT , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
-),
-#endif
 
 /* lower
  *
@@ -177,7 +136,7 @@ LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,              
  * |  `   |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  | F12  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | Tab  |   !  |   @  |   #  |   $  |   %  |-------.    ,-------|   ^  |   &  |   *  |   (  |   )  |   |  |
- * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
+ * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * | Shift|  =   |  -   |  +   |   {  |   }  |-------|    |-------|   [  |   ]  |   ;  |   :  |   \  | Shift|
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
@@ -208,20 +167,20 @@ LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,              
  */
 [_RAISE] = LAYOUT(
   KC_CYCLE, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD , KC_VOLU,                     _______, _______ , _______, KC_PSCR,  KC_SCRL , KC_PAUS,
-  _RGB_TOG, KC_INS , KC_PSCR, KC_APP , XXXXXXX , XXXXXXX,                     XXXXXXX, KC_PRVWD, XXXXXXX, KC_NXTWD, KC_DLINE, KC_BSPC,
-  _RGB_MOD, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
-  _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, XXXXXXX, _______,   _______, XXXXXXX, KC_LSTRT, XXXXXXX, KC_LEND , _______ , KC_PGDN,
-                    SOFLE_L  _______, _______, _______, _______,    _______, _______, _______, _______ SOFLE_R
+  _RGB_TOG, KC_INS , KC_PSCR, KC_APP , _______ , _______,                     _______, KC_PRVWD, _______, KC_NXTWD, KC_DLINE, KC_BSPC,
+  _RGB_MOD, KC_LALT, KC_LCTL, KC_LSFT, _______ , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
+  _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, _______, _______,   _______, _______, KC_LSTRT, _______, KC_LEND , _______ , KC_PGDN,
+                     SOFLE_L  _______, _______,  _______, _______,   _______, _______, _______,  _______  SOFLE_R
 ),
 
 /* ADJUST
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |CLMKDH|MIRYOK|      |                    |      |MsBtn1|      |MsBtn2|      |      |
+ * |      |      |      |      |      |      |                    |      |MsBtn1|      |MsBtn2|      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | BOOT |      |      |      |      |      |-------.    ,-------|MsLeft| MsDn | MsUP |MsRght|      |      |
- * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
+ * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------|    |-------|      | PREV | PLAY | NEXT |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
@@ -229,10 +188,10 @@ LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,              
  *            ~------------------------------------'           '------''----------------------------'
  */
 [_ADJUST] = LAYOUT(
-  XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     XXXXXXX, KC_BTN1, XXXXXXX, KC_BTN2, XXXXXXX, XXXXXXX,
-  QK_BOOT,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX,                     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, XXXXXXX, XXXXXXX,
-  XXXXXXX,   XXXXXXX,   XXXXXXX,    XXXXXXX,       XXXXXXX,    XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, XXXXXXX,
+  _______,   _______,   _______,    _______,       _______,    _______,                     _______, _______, _______, _______, _______, _______,
+  _______,   _______,   _______,    _______,       _______,    _______,                     _______, KC_BTN1, _______, KC_BTN2, _______, _______,
+  QK_BOOT,   _______,   _______,    _______,       _______,    _______,                     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______,
+  _______,   _______,   _______,    _______,       _______,    _______, _______,   _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______,
                         SOFLE_L     _______,       _______,    _______, _______,   _______, _______, _______, _______ SOFLE_R
 ),
 
@@ -242,8 +201,8 @@ LT(_LOC, KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,              
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      | ä Ä  |  ß   |      |      |      |-------'    '-------|      |      |      |      |      |      |
- * |------+------+------+------+------+------|  LGUI |    | RGUI  |------+------+------+------+------+------|
+ * |      | ä Ä  |      |  ß   |      |      |-------,    ,-------|      |      |      |      |      |      |
+ * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------|    |-------|      |      |      |      |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *            ~SOFLE_L~ LAlt | LCTR |LOWER | /Enter  /      \Space \   |RAISE | RCTR | RAlt ~SOFLE_R~
@@ -315,11 +274,6 @@ static void print_status_narrow(void) {
         case _COLEMAK_DH:
             oled_write_ln_P(PSTR("ClmkD"), false);
             break;
-#ifdef MIRYOKU_ENABLE
-        case _MIRYOKU:
-            oled_write_ln_P(PSTR("Mryok"), false);
-            break;
-#endif
         default:
             oled_write_P(PSTR("Undef"), false);
     }
@@ -328,9 +282,6 @@ static void print_status_narrow(void) {
     oled_write_ln_P(PSTR("LAYER"), false);
     switch (get_highest_layer(layer_state)) {
         case _COLEMAK_DH:
-#ifdef MIRYOKU_ENABLE
-        case _MIRYOKU:
-#endif
             oled_write_P(PSTR("Base\n"), false);
             break;
         case _RAISE:
@@ -422,13 +373,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 set_single_persistent_default_layer(_COLEMAK_DH);
             }
             return false;
-#ifdef MIRYOKU_ENABLE
-        case KC_MIRYOKU:
-            if (record->event.pressed) {
-                set_single_persistent_default_layer(_MIRYOKU);
-            }
-            return false;
-#endif
         case KC_PRVWD:
             if (record->event.pressed) {
                 register_mods(mod_config(MOD_LCTL));
