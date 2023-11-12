@@ -83,18 +83,6 @@ tap_dance_action_t tap_dance_actions[] = {
 #define C_ALT_I LALT_T(KC_I)
 #define C_GUI_O RGUI_T(KC_O)
 
-// Left-hand original miryoku home row mods
-#define M_GUI_A LGUI_T(KC_A)
-#define M_ALT_R LALT_T(KC_R)
-#define M_CTL_S LCTL_T(KC_S)
-#define M_SFT_T LSFT_T(KC_T)
-
-// Right-hand original miryoku home row mods
-#define M_SFT_N RSFT_T(KC_N)
-#define M_CTL_E RCTL_T(KC_E)
-#define M_ALT_I RALT_T(KC_I)
-#define M_GUI_O RGUI_T(KC_O)
-
 // ---------------------------------------------------------------------------------------------
 #define UML_AE RALT(KC_Q)
 #define UML_OE RALT(KC_P)
