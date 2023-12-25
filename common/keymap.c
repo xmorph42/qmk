@@ -83,6 +83,8 @@ tap_dance_action_t tap_dance_actions[] = {
 #define EU_EUR RALT(KC_5)
 // ---------------------------------------------------------------------------------------------
 
+#define USE_SFT_ESC_MOD   // Hold ESC -> LSHIFT   (otherwise hold ESC -> LOCALE layer)
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * COLEMAK-DH
@@ -91,10 +93,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * | TAB  |   Q  |   W  |   F  |   P  |   B  |                    |   J  |   L  |   U  |   Y  |  ; : | Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | ESC  |   A  |   R  |   S  |   T  |   G  |-------.    ,-------|   M  |   N  |   E  |   I  |   O  | ' "  |
- * |Locale|   GUI|   ALT|   CTL|   SFT|      |       |    |       |      |   SFT|   CTL|   ALT|   GUI|Locale|
+ * | ESC  |   A  |   R  |   S  |   T  |   G  |                    |   M  |   N  |   E  |   I  |   O  | ' "  |
+ * |Locale|   GUI|   ALT|   CTL|   SFT|      |                    |      |   SFT|   CTL|   ALT|   GUI|Locale|
+ * |LShift|   GUI|   ALT|   CTL|   SFT|      |-------.    ,-------|      |   SFT|   CTL|   ALT|   GUI|Locale|
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |LShift|   Z  |   X  |   C  |   D  |   V  |-------.    .-------|   K  |   H  |  , < |  . > |  / ? |RShift|
+ * |LShift|   Z  |   X  |   C  |   D  |   V  |       |    |       |   K  |   H  |  , < |  . > |  / ? |RShift|
+ * |Locale|   Z  |   X  |   C  |   D  |   V  |-------.    .-------|   K  |   H  |  , < |  . > |  / ? |RShift|
  * |      |      |      |      |      |      |                    |      |      |      |      |      |Enter |
  * `-----------------------------------------/--------,  ,--------\-----------------------------------------'
  *              |SOFLL| LAlt | LCTR |LOWER | /Enter  /    \ Space \ | RAISE | RCTR | RAlt | SOFLR |
@@ -104,8 +108,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_COLEMAK_DH] = LAYOUT(
   KC_GRV       , KC_1   , KC_2   , KC_3   , KC_4   , KC_5      ,                    KC_6      , KC_7   , KC_8   , KC_9   , KC_0   , KC_MINS,
   KC_TAB       , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                    KC_J      , KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
+#ifdef USE_SFT_ESC_MOD
 LSFT_T(KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                    KC_M      , C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, RSFT_T(KC_QUOT),
   MO(_LOC)     , KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , _______,  _______, KC_K      , KC_H   , KC_COMM, KC_DOT , KC_SLSH, LT(_LOC, KC_ENT),
+#else
+LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                    KC_M      , C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, LT(_LOC,KC_QUOT),
+  KC_LSFT      , KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , _______,  _______, KC_K      , KC_H   , KC_COMM, KC_DOT , KC_SLSH, RSFT_T(KC_ENT),
+#endif
 #ifdef SOFLE
                            SOFLE_L, KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT, SOFLE_R
 #else
@@ -142,11 +151,11 @@ LSFT_T(KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
 
 /* RAISE
  * ,----------------------------------------.                     ,-----------------------------------------.
- * |      | MPrv | Play | MNxt | Vol- | Vol+ |                    |      |      |      | PrtSc| SclL | Paus |
+ * |RGBtog| MPrv | Play | MNxt | Vol- | Vol+ |                    |      |      |      | PrtSc| SclL | Paus |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |RGBtog| Ins  | Pscr | Menu |      |      |                    |      | PWrd |      | NWrd | DLine| Bspc |
+ * |RGBmod| Ins  | Pscr | Menu |      |      |                    |      | PWrd |      | NWrd | DLine| Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |RGBmod| LGUI | LALT | LCTL |LSFT  | Caps |-------.    ,-------| Left | Down |  Up  | Right|  Del | PgUp |
+ * |(Shft)| LGUI | LALT | LCTL |LSFT  | Caps |-------.    ,-------| Left | Down |  Up  | Right|  Del | PgUp |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      | Undo |  Cut | Copy | Paste|      |-------|    |-------|      | Home |      | End  |      | PgDn |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
@@ -155,9 +164,9 @@ LSFT_T(KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
  *              `----------------------------------'        '--------------------------------------'
  */
 [_RAISE] = LAYOUT(
-  _______ , KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD , KC_VOLU,                     _______, _______ , _______, KC_PSCR,  KC_SCRL , KC_PAUS,
-  _RGB_TOG, KC_INS , KC_PSCR, KC_APP , _______ , _______,                     _______, KC_PRVWD, _______, KC_NXTWD, KC_DLINE, KC_BSPC,
-  _RGB_MOD, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
+  _RGB_TOG, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD , KC_VOLU,                     _______, _______ , _______, KC_PSCR,  KC_SCRL , KC_PAUS,
+  _RGB_MOD, KC_INS , KC_PSCR, KC_APP , _______ , _______,                     _______, KC_PRVWD, _______, KC_NXTWD, KC_DLINE, KC_BSPC,
+  _______ , KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
   _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, _______, _______,   _______, _______, KC_LSTRT, _______, KC_LEND , _______ , KC_PGDN,
 #ifdef SOFLE
                     SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
@@ -168,11 +177,11 @@ LSFT_T(KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
 
 /* ADJUST
  * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * | BOOT |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |      |      |      |                    |      |MsBtnL|MsBtnM|MsBtnR|      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | BOOT |      |      |      |      |      |-------.    ,-------|MsLeft| MsDn | MsUP |MsRght|      |      |
+ * |      |      |      |      |      |      |-------.    ,-------|MsLeft| MsDn | MsUP |MsRght|      |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------|    |-------|      | PREV | PLAY | NEXT |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
@@ -181,9 +190,9 @@ LSFT_T(KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
  *              `----------------------------------'        '--------------------------------------'
  */
 [_ADJUST] = LAYOUT(
-  _______,   _______,   _______,    _______,       _______,    _______,                     _______, _______, _______, _______, _______, _______,
+  QK_BOOT,   _______,   _______,    _______,       _______,    _______,                     _______, _______, _______, _______, _______, _______,
   _______,   _______,   _______,    _______,       _______,    _______,                     _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
-  QK_BOOT,   _______,   _______,    _______,       _______,    _______,                     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______,
+  _______,   _______,   _______,    _______,       _______,    _______,                     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______,
   _______,   _______,   _______,    _______,       _______,    _______, _______,   _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______,
 #ifdef SOFLE
                     SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
