@@ -12,12 +12,6 @@
    #define _RGB_MOD XXXXXXX
 #endif
 
-#define BASE_LAYERS 1    // the first n layers are base layers
-
-#ifdef RP2040
-#else  // maybe not enough space to use all features
-#endif
-
 enum xmorph_layers {
     _COLEMAK_DH,
     _LOWER,
@@ -33,7 +27,6 @@ enum custom_keycodes {
     KC_LSTRT,
     KC_LEND,
     KC_DLINE,
-    KC_CYCLE,       // Cycle layouts
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -149,7 +142,7 @@ LSFT_T(KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
 
 /* RAISE
  * ,----------------------------------------.                     ,-----------------------------------------.
- * |Cycle | MPrv | Play | MNxt | Vol- | Vol+ |                    |      |      |      | PrtSc| SclL | Paus |
+ * |      | MPrv | Play | MNxt | Vol- | Vol+ |                    |      |      |      | PrtSc| SclL | Paus |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      | Ins  | Pscr | Menu |      |      |                    |      | PWrd |      | NWrd | DLine| Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -162,7 +155,7 @@ LSFT_T(KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
  *            ~------------------------------------'           '------''----------------------------'
  */
 [_RAISE] = LAYOUT(
-  KC_CYCLE, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD , KC_VOLU,                     _______, _______ , _______, KC_PSCR,  KC_SCRL , KC_PAUS,
+  _______ , KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD , KC_VOLU,                     _______, _______ , _______, KC_PSCR,  KC_SCRL , KC_PAUS,
   _RGB_TOG, KC_INS , KC_PSCR, KC_APP , _______ , _______,                     _______, KC_PRVWD, _______, KC_NXTWD, KC_DLINE, KC_BSPC,
   _RGB_MOD, KC_LALT, KC_LCTL, KC_LSFT, _______ , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
   _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, _______, _______,   _______, _______, KC_LSTRT, _______, KC_LEND , _______ , KC_PGDN,
@@ -457,11 +450,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 unregister_mods(mod_config(MOD_LCTL));
                 unregister_code(KC_Z);
-            }
-            return false;
-        case KC_CYCLE:
-            if (record->event.pressed) {
-               set_single_persistent_default_layer((1+get_highest_layer(default_layer_state)) % BASE_LAYERS);
             }
             return false;
     }
