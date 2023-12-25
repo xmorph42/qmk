@@ -1,13 +1,8 @@
-# VIA
-#
-# VIA allows tp programm the keyboard without the need to reflash it
-#
-# 2023-01-14 PBU: I observed that with VIA enabled the ADJUST layer is TOTALLY not working! \
-#                 With VIA disabled it works
-VIA_ENABLE = no            # enabling VIA will use 2100 bytes
+# VIA allows keyboard programming without reflashing
+# PBU: But when using VIA the ADJUST layer does NOT work :(
+VIA_ENABLE = no         # enabling VIA will use 2100 bytes
 
 OLED_ENABLE = yes
-OLED_DRIVER = SSD1306
 ENCODER_ENABLE = yes
 CONSOLE_ENABLE = no
 EXTRAKEY_ENABLE = yes
@@ -24,5 +19,5 @@ KEY_OVERRIDE_ENABLE = yes
 # Need ca 680 byte of firmware (without the needed mapping table)
 TAP_DANCE_ENABLE = yes 
 
-BACKLIGHT_ENABLE = no      # Enable keyboard backlight functionality
-RGBLIGHT_ENABLE =  no      # Enable keyboard RGB underglow
+#BACKLIGHT_ENABLE = yes      # Enable keyboard backlight functionality
+RGBLIGHT_ENABLE =  yes      # Enable keyboard RGB underglow

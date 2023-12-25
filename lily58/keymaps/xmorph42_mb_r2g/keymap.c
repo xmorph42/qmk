@@ -39,8 +39,7 @@ enum custom_keycodes {
 // ---------------------------------------------------------------------------------------------
 // TAP DANCE - when a key has different meanings when pressed once or twice
 // ---------------------------------------------------------------------------------------------
-#ifdef SOFLE  // checking if this collides with home-row mods
-
+#ifdef SOFLE  // checking if this collides with home-row mods (set in config.h)
 enum custom_tapdance {
     TD_PLAY,   // handled to control audio play keys
     TD_HOME,
@@ -113,7 +112,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB        , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                    KC_J      , KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
 LT(_LOC, KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                    KC_M      , C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, LT(_LOC, KC_QUOT),
   KC_LSFT       , KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , _______,  _______, KC_K      , KC_H   , KC_COMM, KC_DOT , KC_SLSH, KC_RSFT,
-                           SOFLE_L  KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT SOFLE_R
+#ifdef SOFLE
+                           SOFLE_L, KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT, SOFLE_R
+#else
+                                    KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT
+#endif
 ),
 
 /* lower
@@ -136,7 +139,11 @@ LT(_LOC, KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,               
   KC_GRV , KC_1   , KC_2   , KC_3   , KC_4   , KC_5   ,                      KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_F12 ,
   _______, KC_EXLM, KC_AT  , KC_HASH, KC_DLR , KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_PIPE,
   _______, KC_EQL , KC_MINS, KC_PLUS, KC_LCBR, KC_RCBR, _______,    _______, KC_LBRC, KC_RBRC, KC_SCLN, KC_COLN, KC_BSLS, _______,
-                    SOFLE_L  _______, _______, _______, _______,    _______, _______, _______, _______ SOFLE_R
+#ifdef SOFLE
+                    SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
+#else
+                             _______, _______, _______, _______,    _______, _______, _______, _______
+#endif
 ),
 
 /* RAISE
@@ -158,7 +165,11 @@ LT(_LOC, KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,               
   _RGB_TOG, KC_INS , KC_PSCR, KC_APP , _______ , _______,                     _______, KC_PRVWD, _______, KC_NXTWD, KC_DLINE, KC_BSPC,
   _RGB_MOD, KC_LALT, KC_LCTL, KC_LSFT, _______ , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
   _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, _______, _______,   _______, _______, KC_LSTRT, _______, KC_LEND , _______ , KC_PGDN,
-                     SOFLE_L  _______, _______,  _______, _______,   _______, _______, _______,  _______  SOFLE_R
+#ifdef SOFLE
+                    SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
+#else
+                             _______, _______, _______, _______,    _______, _______, _______, _______
+#endif
 ),
 
 /* ADJUST
@@ -180,7 +191,11 @@ LT(_LOC, KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,               
   _______,   _______,   _______,    _______,       _______,    _______,                     _______, KC_BTN1, KC_BTN3, KC_BTN2, _______, _______,
   QK_BOOT,   _______,   _______,    _______,       _______,    _______,                     KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______,
   _______,   _______,   _______,    _______,       _______,    _______, _______,   _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, _______, _______,
-                        SOFLE_L     _______,       _______,    _______, _______,   _______, _______, _______, _______ SOFLE_R
+#ifdef SOFLE
+                    SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
+#else
+                             _______, _______, _______, _______,    _______, _______, _______, _______
+#endif
 ),
 
 /* LOC
@@ -202,7 +217,11 @@ LT(_LOC, KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,               
   _______, _______, _______, _______, _______, _______,                     _______, _______, UML_UE,  _______, _______, _______,
   _______, UML_AE , _______, GER_SZ , _______, _______,                     _______, _______, EU_EUR,  _______, UML_OE , _______,
   _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______, _______,
-                    SOFLE_L  _______, _______, _______, _______,   _______, _______, _______, _______ SOFLE_R
+#ifdef SOFLE
+                    SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
+#else
+                             _______, _______, _______, _______,    _______, _______, _______, _______
+#endif
 ),
 
 };
