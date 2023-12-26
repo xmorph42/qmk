@@ -12,6 +12,23 @@
    #define _RGB_MOD XXXXXXX
 #endif
 
+// ------------------------------------------------------------------------------------------------
+// My config
+// ------------------------------------------------------------------------------------------------
+
+/* 2023-12-26: hmmmm
+ * - sometimes the hold mod Shift on Esc doesn't fire  :(    
+ * - the both-shift to enable CAPS WORD wasn't sometimes firing
+ * ??? maybe the general tap_term (170) was too long - so I now try term_per_key to reduce 
+ */
+ #define USE_SFT_ESC_MOD        // Hold ESC -> LSHIFT   (otherwise hold ESC -> LOCALE layer)
+
+/* 2023-12-26: I don't have problem with rollover and home-row mods (at least not with GACS)
+#define USE_ROLLED_MOD_CANCEL  // Rolled modifiersecancellation
+*/
+
+// ------------------------------------------------------------------------------------------------
+
 enum xmorph_layers {
     _COLEMAK_DH,
     _LOWER,
@@ -83,7 +100,6 @@ tap_dance_action_t tap_dance_actions[] = {
 #define EU_EUR RALT(KC_5)
 // ---------------------------------------------------------------------------------------------
 
-#define USE_SFT_ESC_MOD   // Hold ESC -> LSHIFT   (otherwise hold ESC -> LOCALE layer)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
@@ -332,6 +348,66 @@ bool oled_task_user(void) {
 
 #endif // OLED_ENABLE
 
+
+#ifdef  USE_ROLLED_MOD_CANCEL
+// Rolled modifiers cancellation' colemak example:
+// https://precondition.github.io/home-row-mods#rolled-modifiers-cancellation
+bool rolled_modifiers_cancellation(uint16_t keycode, keyrecord_t *record) 
+{
+    switch (keycode) {
+
+      // ------------------------------------------------------------------------------------------
+      // Rolled modifiers cancellation' colemak example:
+      // https://precondition.github.io/home-row-mods#rolled-modifiers-cancellation
+      // This piece of code nullifies the effect of Right Shift when tapping the RCTL_T(KC_E) key.
+      // This helps rolling over RSFT_T(KC_N) and RCTL_T(KC_E) to obtain the intended "ne" instead
+      // of "E".
+      // Consequently, capital E can only be obtained by tapping RCTL_T(KC_E) and holding 
+      // LSFT_T(KC_T) (left Shift mod tap).
+      case RCTL_T(KC_E):
+         if (record->event.pressed && record->tap.count > 0) {
+            if (get_mods() & MOD_BIT(KC_RSFT)) { // Detect right Shift
+               // temporarily disable right Shift so that we can send KC_E and KC_N without Shift on.
+               unregister_mods(MOD_BIT(KC_RSFT));
+               tap_code(KC_N);
+               tap_code(KC_E);
+               // restore the mod state
+               add_mods(MOD_BIT(KC_RSFT));
+               // to prevent QMK from processing RCTL_T(KC_E) as usual in our special case
+               return false;
+            }
+         }
+         return true;
+      case RCTL_T(KC_S):
+         if (record->event.pressed && record->tap.count > 0) {
+            if (get_mods() & MOD_BIT(KC_LSFT)) { // Detect left Shift
+               // temporarily disable right Shift so that we can send KC_E and KC_N without Shift on.
+               unregister_mods(MOD_BIT(KC_LSFT));
+               tap_code(KC_T);
+               tap_code(KC_S);
+               // restore the mod state
+               add_mods(MOD_BIT(KC_LSFT));
+               // to prevent QMK from processing RCTL_T(KC_E) as usual in our special case
+               return false;
+            }
+         }
+         return true;
+   }
+  return true;
+}
+#endif
+
+#ifdef TAPPING_TERM_PER_KEY
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case SFT_T(KC_ESC):
+            return 130;
+        default:
+            return TAPPING_TERM;
+    }
+}
+#endif
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef CONSOLE_ENABLE
 #ifdef PBU_KEYLOG
@@ -348,37 +424,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif
 #endif
     switch (keycode) {
-      case RCTL_T(KC_J):
-        /*
-         * PBU: Example adapted https://precondition.github.io/home-row-mods#rolled-modifiers-cancellation
-         * This piece of code nullifies the effect of Right Shift when tapping
-         * the RCTL_T(KC_J) key.
-         * This helps rolling over RSFT_T(KC_K) and RCTL_T(KC_J) to obtain the intended "en" instead of "N".
-         * Consequently, capital N can only be obtained by tapping RCTL_T(KC_N)
-         * and holding LSFT_T(KC_S) (which is the left Shift mod tap).
-         */
-         /*
-        Detect the tap.
-        We're only interested in overriding the tap behaviour
-        in a certain cicumstance. The hold behaviour can stay the same.
-        */
-         if (record->event.pressed && record->tap.count > 0) {
-            // Detect right Shift
-            if (get_mods() & MOD_BIT(KC_RSFT)) {
-               // temporarily disable right Shift
-               // so that we can send KC_E and KC_N
-               // without Shift on.
-               unregister_mods(MOD_BIT(KC_RSFT));
-               tap_code(KC_K);
-               tap_code(KC_J);
-               // restore the mod state
-               add_mods(MOD_BIT(KC_RSFT));
-               // to prevent QMK from processing RCTL_T(KC_N) as usual in our special case
-               return false;
-            }
-         }
-         return true;
-        case KC_COLEMAK_DH:
+
+#ifdef  USE_ROLLED_MOD_CANCEL
+      case RCTL_T(KC_E):
+         return rolled_modifiers_cancellation(keycode, record);
+      case RCTL_T(KC_S):
+         return rolled_modifiers_cancellation(keycode, record);
+#endif
+      case KC_COLEMAK_DH:
             if (record->event.pressed) {
                 set_single_persistent_default_layer(_COLEMAK_DH);
             }

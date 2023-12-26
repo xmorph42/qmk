@@ -49,6 +49,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // 2023-03-07:PBU:TAPPING_TERM=100 is too short for homerow mods to work for me
 #define TAPPING_TERM 170
 
+// more granular control as I have problems with shift hold mod on ESC
+#define TAPPING_TERM_PER_KEY
+
+// "Caps Words" feature (https://github.com/qmk/qmk_firmware/blob/master/docs/feature_caps_word.md)
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+
 #undef RGBLED_NUM
 #define RGBLIGHT_EFFECT_BREATHING
 #define RGBLIGHT_EFFECT_RAINBOW_MOOD

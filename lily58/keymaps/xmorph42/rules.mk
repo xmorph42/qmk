@@ -26,6 +26,9 @@ KEY_OVERRIDE_ENABLE = yes
 # 2023-03-07:PBU:hmmm .. I used TAP_DANCE on the sofles encoder buttons. So not needed for lily
 TAP_DANCE_ENABLE = no
 
+# "Caps Words" feature (https://github.com/qmk/qmk_firmware/blob/master/docs/feature_caps_word.md)
+CAPS_WORD_ENABLE = yes
+
 # If you want to change the display of OLED, you need to change here
 #SRC +=  ./lib/rgb_state_reader.c \
 #        ./lib/layer_state_reader.c \

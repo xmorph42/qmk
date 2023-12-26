@@ -19,5 +19,8 @@ KEY_OVERRIDE_ENABLE = yes
 # Need ca 680 byte of firmware (without the needed mapping table)
 TAP_DANCE_ENABLE = yes 
 
+# "Caps Words" feature (https://github.com/qmk/qmk_firmware/blob/master/docs/feature_caps_word.md)
+CAPS_WORD_ENABLE = yes
+
 #BACKLIGHT_ENABLE = yes      # Enable keyboard backlight functionality
 RGBLIGHT_ENABLE =  yes      # Enable keyboard RGB underglow
