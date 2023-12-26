@@ -17,9 +17,9 @@
 // ------------------------------------------------------------------------------------------------
 
 /* 2023-12-26: hmmmm
- * - sometimes the hold mod Shift on Esc doesn't fire  :(    
+ * - sometimes the hold mod Shift on Esc doesn't fire  :(
  * - the both-shift to enable CAPS WORD wasn't sometimes firing
- * ??? maybe the general tap_term (170) was too long - so I now try term_per_key to reduce 
+ * ??? maybe the general tap_term (170) was too long - so I now try term_per_key to reduce
  */
  #define USE_SFT_ESC_MOD        // Hold ESC -> LSHIFT   (otherwise hold ESC -> LOCALE layer)
 
@@ -352,7 +352,7 @@ bool oled_task_user(void) {
 #ifdef  USE_ROLLED_MOD_CANCEL
 // Rolled modifiers cancellation' colemak example:
 // https://precondition.github.io/home-row-mods#rolled-modifiers-cancellation
-bool rolled_modifiers_cancellation(uint16_t keycode, keyrecord_t *record) 
+bool rolled_modifiers_cancellation(uint16_t keycode, keyrecord_t *record)
 {
     switch (keycode) {
 
@@ -362,7 +362,7 @@ bool rolled_modifiers_cancellation(uint16_t keycode, keyrecord_t *record)
       // This piece of code nullifies the effect of Right Shift when tapping the RCTL_T(KC_E) key.
       // This helps rolling over RSFT_T(KC_N) and RCTL_T(KC_E) to obtain the intended "ne" instead
       // of "E".
-      // Consequently, capital E can only be obtained by tapping RCTL_T(KC_E) and holding 
+      // Consequently, capital E can only be obtained by tapping RCTL_T(KC_E) and holding
       // LSFT_T(KC_T) (left Shift mod tap).
       case RCTL_T(KC_E):
          if (record->event.pressed && record->tap.count > 0) {
@@ -400,7 +400,8 @@ bool rolled_modifiers_cancellation(uint16_t keycode, keyrecord_t *record)
 #ifdef TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case SFT_T(KC_ESC):
+        case LSFT_T(KC_ESC):
+        case RSFT_T(KC_QUOT):
             return 130;
         default:
             return TAPPING_TERM;
