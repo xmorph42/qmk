@@ -118,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |      |                    |      |      |      |      |      |Enter |
  * `-----------------------------------------/--------,  ,--------\-----------------------------------------'
  *              |SOFLL| LAlt | LCTR |LOWER | /Enter  /    \ Space \ | RAISE | RCTR | RAlt | SOFLR |
- *              |     |      |      |      |/       /      \      \ |       |      |      |       |
+ *              |     |      |      |ESC   |/       /      \      \ |       |      |      |       |
  *              `----------------------------------'       '--------------------------------------'
  */
 [_COLEMAK_DH] = LAYOUT(
@@ -134,7 +134,7 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
 #ifdef SOFLE
                            SOFLE_L, KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT, SOFLE_R
 #else
-                                    KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT
+                                    KC_LALT, KC_LCTL, LT(_LOWER,KC_ESC), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT
 #endif
 ),
 
