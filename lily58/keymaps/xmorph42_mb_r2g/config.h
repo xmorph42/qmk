@@ -51,6 +51,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // "Caps Words" feature (https://github.com/qmk/qmk_firmware/blob/master/docs/feature_caps_word.md)
 #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
 
+// 2024-01-05 I have problems with LT(LOWER,ESC) and deflault mode (even with tapping-term 130)
+// so I want to test this one: but currently only for this specific key
+#define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+
 #undef RGBLED_NUM
 #define RGBLIGHT_EFFECT_BREATHING
 #define RGBLIGHT_EFFECT_RAINBOW_MOOD

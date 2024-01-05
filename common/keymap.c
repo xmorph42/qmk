@@ -19,7 +19,7 @@
 /* 2023-12-26: hmmmm
  * - sometimes the hold mod Shift on Esc doesn't fire  :(
  * - the both-shift to enable CAPS WORD wasn't sometimes firing
- * ??? maybe the general tap_term (170) was too long - so I now try term_per_key to reduce
+ * - it is ??? maybe the general tap_term (170) was too long - so I now try term_per_key to reduce
  */
  #define USE_SFT_ESC_MOD        // Hold ESC -> LSHIFT   (otherwise hold ESC -> LOCALE layer)
 
@@ -134,7 +134,7 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
 #ifdef SOFLE
                            SOFLE_L, KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT, SOFLE_R
 #else
-                                    KC_LALT, KC_LCTL, LT(_LOWER,KC_ESC), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT
+                                    KC_LALT, KC_LCTL, LT(_LOWER, KC_ESC), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT
 #endif
 ),
 
@@ -397,10 +397,22 @@ bool rolled_modifiers_cancellation(uint16_t keycode, keyrecord_t *record)
 }
 #endif
 
+/**
+* 2024-01-04: Problems having LT(_LOWER,KC_ESC)
+* a) the 170 tapping term is definitive too long to activate my LOWER layer.
+*   I have symbols on that layer (i.e. '{' ) which didn't fire when I type fast.
+*   So I will set it also to 130
+* b) is better - but not good enough. teested with 100 
+* c) still not good - I remove it from here and try hold_on_other_key mode for this key
+*
+* 2023-12-??
+* - I added tapping term per key as with having 170 on LSHFT_T(ESC) the shift sometimes didn't 
+*   fire. 130ms seams to work better
+* - Additionally 130ms seems to be more working to get caps_words with LSHFT+RSHFT
+*/
 #ifdef TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LSFT_T(KC_ESC):
         case RSFT_T(KC_QUOT):
             return 130;
         default:
@@ -408,6 +420,25 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 #endif
+
+/**
+* 2024-01-04: Problems having LT(_LOWER,KC_ESC)
+* a) setting tapping term to 130, 100 does not work
+* b) trying to sed hold_on_other_keythe 170 tapping term is definitive too long to activate my LOWER layer.
+*/
+#ifdef HOLD_ON_OTHER_KEY_PRESS_PER_KEY
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LSFT_T(KC_ESC):
+        case LT(_LOWER,KC_ESC):
+            return true;
+        default:
+            // Do not select the hold action when another key is pressed.
+            return false;
+    }
+}
+#endif
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef CONSOLE_ENABLE
