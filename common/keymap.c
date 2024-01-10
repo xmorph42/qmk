@@ -223,7 +223,7 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |      |      |      |                    |      |      | ü Ü  |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      | ä Ä  |      |  ß   |      |      |-------,    ,-------|      |      |  €   |      | ö Ö  |      |
+ * |      | ä Ä  |      |  ß   |      |      |-------,    ,-------|      |      |  €   | RALT | ö Ö  |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------|    |-------|      |      |      |      |      |      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
@@ -234,7 +234,7 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
 [_LOC] = LAYOUT(
   _______, _______, _______, _______, _______, _______,                     _______, _______, _______, _______, _______, _______,
   _______, _______, _______, _______, _______, _______,                     _______, _______, UML_UE,  _______, _______, _______,
-  _______, UML_AE , _______, GER_SZ , _______, _______,                     _______, _______, EU_EUR,  _______, UML_OE , _______,
+  _______, UML_AE , _______, GER_SZ , _______, _______,                     _______, _______, EU_EUR,  R_ALT,   UML_OE , _______,
   _______, _______, _______, _______, _______, _______, _______,   _______, _______, _______, _______, _______, _______, _______,
 #ifdef SOFLE
                     SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
@@ -402,11 +402,11 @@ bool rolled_modifiers_cancellation(uint16_t keycode, keyrecord_t *record)
 * a) the 170 tapping term is definitive too long to activate my LOWER layer.
 *   I have symbols on that layer (i.e. '{' ) which didn't fire when I type fast.
 *   So I will set it also to 130
-* b) is better - but not good enough. teested with 100 
+* b) is better - but not good enough. teested with 100
 * c) still not good - I remove it from here and try hold_on_other_key mode for this key
 *
 * 2023-12-??
-* - I added tapping term per key as with having 170 on LSHFT_T(ESC) the shift sometimes didn't 
+* - I added tapping term per key as with having 170 on LSHFT_T(ESC) the shift sometimes didn't
 *   fire. 130ms seams to work better
 * - Additionally 130ms seems to be more working to get caps_words with LSHFT+RSHFT
 */
