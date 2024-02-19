@@ -125,7 +125,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB       , KC_Q   , KC_W   , KC_F   , KC_P   , KC_B      ,                    KC_J      , KC_L   , KC_U   , KC_Y   , KC_SCLN, KC_BSPC,
 #ifdef USE_SFT_ESC_MOD
 LSFT_T(KC_ESC) , C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                    KC_M      , C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, RSFT_T(KC_QUOT),
-  MO(_LOC)     , KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , _______,  _______, KC_K      , KC_H   , KC_COMM, KC_DOT , KC_SLSH, LT(_LOC, KC_ENT),
+  MO(_LOC)     , KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , _______,  QK_LEAD, KC_K      , KC_H   , KC_COMM, KC_DOT , KC_SLSH, LT(_LOC, KC_ENT),
 #else
 LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                    KC_M      , C_SFT_N, C_CTL_E, C_ALT_I, C_GUI_O, LT(_LOC,KC_QUOT),
   KC_LSFT      , KC_Z   , KC_X   , KC_C   , KC_D   , KC_V      , _______,  _______, KC_K      , KC_H   , KC_COMM, KC_DOT , KC_SLSH, RSFT_T(KC_ENT),
@@ -168,11 +168,11 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
  * ,----------------------------------------.                     ,-----------------------------------------.
  * |RGBtog| MPrv | Play | MNxt | Vol- | Vol+ |                    |      |      |      | PrtSc| SclL | Paus |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |RGBmod| Ins  | Pscr | Menu |      |      |                    |      | PWrd |      | NWrd | DLine| Bspc |
+ * |RGBmod| Ins  | Pscr | Menu |      |      |                    | Paus | PWrd | PgUp | NWrd | DLine| Bspc |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |(Shft)| LGUI | LALT | LCTL |LSFT  | Caps |-------.    ,-------| Left | Down |  Up  | Right|  Del | PgUp |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      | Undo |  Cut | Copy | Paste|      |-------|    |-------|      | Home |      | End  |      | PgDn |
+ * |      | Undo |  Cut | Copy | Paste|      |-------|    |-------|      | Home | PgDn | End  |      | PgDn |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *              |SOFLL| LAlt | LCTR |LOWER | /Enter  /     \ Space \ | RAISE | RCTR | RAlt | SOFLR |
  *              |     |      |      |      |/       /       \      \ |       |      |      |       |
@@ -182,7 +182,7 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
   _RGB_TOG, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD , KC_VOLU,                     _______, _______ , _______, KC_PSCR,  KC_SCRL , KC_PAUS,
   _RGB_MOD, KC_INS , KC_PSCR, KC_APP , _______ , _______,                     KC_PAUS, KC_PRVWD, KC_PGUP, KC_NXTWD, KC_DLINE, KC_BSPC,
   _______ , KC_TAB,  _______, _______, _______ , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
-  _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, KC_PASTE, _______,   _______, _______, KC_LSTRT, KC_PGDN, KC_LEND , _______ , KC_PGDN,
+  _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, KC_PASTE, _______,  _______, _______, KC_LSTRT, KC_PGDN, KC_LEND , _______ , KC_PGDN,
 #ifdef SOFLE
                     SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
 #else
@@ -194,11 +194,11 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * | BOOT |      |      |      |      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |MsBtnL|MsBtnM|MsBtnR|      |      |
+ * |      |      |      |      |      |      |                    |MScrUp|MsBtnL|MsBtnM|MsBtnR|MScrLt|      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |      |      |      |      |      |      |-------.    ,-------|MsLeft| MsDn | MsUP |MsRght|      |      |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------|    |-------|      | PREV | PLAY | NEXT |      |      |
+ * |      |      |      |      |      |      |-------|    |-------|MScrDn| PREV | PLAY | NEXT |MScrRt|      |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
  *              |SOFLL| LAlt | LCTR |LOWER | /Enter  /     \ Space \ | RAISE | RCTR | RAlt | SOFLR |
  *              |     |      |      |      |/       /       \      \ |       |      |      |       |
@@ -244,9 +244,23 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
 
 };
 
+#define LEADER_TIMEOUT 500
+
 layer_state_t layer_state_set_user(layer_state_t state) {
   return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
+
+void leader_start_user(void) {
+    // Do something when the leader key is pressed
+}
+
+void leader_end_user(void) {
+    if (leader_sequence_one_key(KC_T)) {
+        // Leader, f => Types the below string
+        SEND_STRING("kubecolor get pods -A\n");
+    }
+}
+
 
 //SSD1306 OLED update loop, make sure to enable OLED_ENABLE=yes in rules.mk
 #ifdef OLED_ENABLE

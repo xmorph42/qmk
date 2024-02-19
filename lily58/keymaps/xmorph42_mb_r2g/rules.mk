@@ -10,10 +10,10 @@ RGBLIGHT_ENABLE = no        # Enable WS2812 RGB underlight.
 SWAP_HANDS_ENABLE = no      # Enable one-hand typing
 OLED_ENABLE= yes     # OLED display
 
-# Allows e.g. custom shift keys (programmers dvorak). 
+# Allows e.g. custom shift keys (programmers dvorak).
 # Need min 1376 bytes of firmware space
 # This method also allows for which layout the shift key should be overwritten
-KEY_OVERRIDE_ENABLE = yes 
+KEY_OVERRIDE_ENABLE = yes
 
 # allow to assign different codes if a key is only tapped once or twice
 # Need ca 680 byte of firmware (without the needed mapping table)
@@ -22,6 +22,8 @@ TAP_DANCE_ENABLE = no
 
 # "Caps Words" feature (https://github.com/qmk/qmk_firmware/blob/master/docs/feature_caps_word.md)
 CAPS_WORD_ENABLE = yes
+
+LEADER_ENABLE = yes
 
 # If you want to change the display of OLED, you need to change here
 #SRC +=  ./lib/rgb_state_reader.c \
