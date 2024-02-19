@@ -1,6 +1,24 @@
 # History
 
 
+## 2024-02-18 - REMOVED BSPC an RAISE
+
+* BSPC when tapping RAISE is really bad !!!!
+  - the BSPC setting intefers with my RAISE-`vim move-keys`
+    when I (accidentally) press BSPC twice and then RAISE-mnei no movement works but strange jumps
+
+## 2024-02-18 - add ESC on LOWER, BSPC an RAISE
+
+* to get my ferris/sweep layout in sync with lily and ergo I set
+  - ESC when tapping LOWER `LT(_LOWER, KC_ESC)`
+  - BACKSPACE when tapping RAISE `LT(_RAISE, KC_BSPC)`
+
+## 2024-02-18
+
+* to get my ferris/sweep layout in sync with lily and ergo I set
+  - ESC when tapping LOWER `LT(_LOWER, KC_ESC)`
+  - BACKSPACE when tapping RAISE `LT(_RAISE, KC_BSPC)`
+
 ## 2024-01-05 01:09
 
 * us now HOLD_ON_OTHER_KEY_PRESS_PER_KEY for LT(LOWER,ESC) and LSHFT_T(ESC) - seems to work good
@@ -16,3 +34,5 @@
 ## 2024-01-02
 
 * added ESC as tap to 'LOWER' key using LT(LOWER,KC_ESC)
+
+

@@ -34,7 +34,7 @@ enum xmorph_layers {
     _LOWER,
     _RAISE,
     _ADJUST,
-    _LOC,     // locale layer (umlauts)
+    _LOC,     // locale layer (umlautsgg)
 };
 
 enum custom_keycodes {
@@ -100,7 +100,6 @@ tap_dance_action_t tap_dance_actions[] = {
 #define EU_EUR RALT(KC_5)
 // ---------------------------------------------------------------------------------------------
 
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
  * COLEMAK-DH
@@ -134,7 +133,7 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
 #ifdef SOFLE
                            SOFLE_L, KC_LALT, KC_LCTL, MO(_LOWER), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT, SOFLE_R
 #else
-                                    KC_LALT, KC_LCTL, LT(_LOWER, KC_ESC), KC_ENT ,  KC_SPC , MO(_RAISE), KC_RCTL, KC_RALT
+                                    KC_LALT, KC_LCTL, LT(_LOWER, KC_ESC), KC_ENT ,  KC_SPC, MO(_RAISE), KC_RCTL, KC_RALT
 #endif
 ),
 
@@ -181,9 +180,9 @@ LT(_LOC,KC_ESC), C_GUI_A, C_ALT_R, C_CTL_S, C_SFT_T, KC_G      ,                
  */
 [_RAISE] = LAYOUT(
   _RGB_TOG, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLD , KC_VOLU,                     _______, _______ , _______, KC_PSCR,  KC_SCRL , KC_PAUS,
-  _RGB_MOD, KC_INS , KC_PSCR, KC_APP , _______ , _______,                     _______, KC_PRVWD, _______, KC_NXTWD, KC_DLINE, KC_BSPC,
-  _______ , KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
-  _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, _______, _______,   _______, _______, KC_LSTRT, _______, KC_LEND , _______ , KC_PGDN,
+  _RGB_MOD, KC_INS , KC_PSCR, KC_APP , _______ , _______,                     KC_PAUS, KC_PRVWD, KC_PGUP, KC_NXTWD, KC_DLINE, KC_BSPC,
+  _______ , KC_TAB,  _______, _______, _______ , KC_CAPS,                     KC_LEFT, KC_DOWN,  KC_UP,   KC_RGHT , KC_DEL  , KC_PGUP,
+  _______ , KC_UNDO, KC_CUT , KC_COPY, KC_PASTE, KC_PASTE, _______,   _______, _______, KC_LSTRT, KC_PGDN, KC_LEND , _______ , KC_PGDN,
 #ifdef SOFLE
                     SOFLE_L, _______, _______, _______, _______,    _______, _______, _______, _______, SOFLE_R
 #else

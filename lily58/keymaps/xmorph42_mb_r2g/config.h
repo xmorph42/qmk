@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * Since 2023-02-26 QMK replaced TAPPING_FORCE_HOLD with defining QUICK_TAP_TERM to 0
  *
  * If QUICK_TAP_TERM is set to 0, no key is generated when holding the "mod keys".
- * When using home-row mods this unfortunately mean, that the vim movements jkl will no longer 
+ * When using home-row mods this unfortunately mean, that the vim movements jkl will no longer
  * work :(
  *
  * Not defining QUICK_TAP_TERM results that one need to tap the key twice to get them repeated.
@@ -51,7 +51,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // "Caps Words" feature (https://github.com/qmk/qmk_firmware/blob/master/docs/feature_caps_word.md)
 #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
 
-// 2024-01-05 I have problems with LT(LOWER,ESC) and deflault mode (even with tapping-term 130)
+// 2024-01-05 I have problems with LT(LOWER,ESC) and default mode (even with tapping-term 130)
 // so I want to test this one: but currently only for this specific key
 #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
 
