@@ -13,13 +13,12 @@ OLED_ENABLE= yes     # OLED display
 # -- xmorph42 -----------------------------------------------------------------------------
 LTO_ENABLE = yes
 
-# use 42keebs frood 
+# use 42keebs frood
 CONVERT_TO=promicro_rp2040
 
-# Allows e.g. custom shift keys (programmers dvorak). 
-# Need min 1376 bytes of firmware space
+# This can be used to define custom shift keys (e.g. to emulate programmers dvorak).
 # This method also allows for which layout the shift key should be overwritten
-KEY_OVERRIDE_ENABLE = yes 
+KEY_OVERRIDE_ENABLE = no
 
 # allow to assign different codes if a key is only tapped once or twice
 # Need ca 680 byte of firmware (without the needed mapping table)
@@ -28,6 +27,8 @@ TAP_DANCE_ENABLE = no
 
 # "Caps Words" feature (https://github.com/qmk/qmk_firmware/blob/master/docs/feature_caps_word.md)
 CAPS_WORD_ENABLE = yes
+
+LEADER_ENABLE = yes
 
 # If you want to change the display of OLED, you need to change here
 #SRC +=  ./lib/rgb_state_reader.c \
